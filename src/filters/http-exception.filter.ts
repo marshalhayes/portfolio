@@ -7,7 +7,6 @@ import {
   HttpException,
   Logger,
 } from '@nestjs/common';
-import { pathToViews } from '../main';
 import { Response, Request } from 'express';
 
 /**
@@ -31,7 +30,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     this.logger.debug(`${req.url} returned status code ${status}`);
 
     // Look for a view that goes along with the status code
-    const pathToExceptionPage = join(pathToViews, `${status}.tsx`);
+    const pathToExceptionPage = join(__dirname, `../../views/${status}.tsx`);
     if (!existsSync(pathToExceptionPage)) {
       return res.sendStatus(status);
     }

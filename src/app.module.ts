@@ -6,12 +6,7 @@ import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { PrismicModule } from './prismic/prismic.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-    PrismicModule,
-  ],
+  imports: [ConfigModule.forRoot(), PrismicModule],
   controllers: [AppController],
   providers: [
     {

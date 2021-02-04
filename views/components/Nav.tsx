@@ -4,9 +4,14 @@ export default class Nav extends React.Component {
   render() {
     return (
       <nav>
-        <ul>
-          <li>Blog</li>
-          <li>About</li>
+        <ul className="list-unstyled nav-items">
+          <li>
+            <a href="/blog">Blog</a>
+          </li>
+
+          <li>
+            <a href="/about">About</a>
+          </li>
         </ul>
       </nav>
     );

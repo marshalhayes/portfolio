@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { BaseLayoutProps } from './layouts/Base';
 import Page from './layouts/Page';
-import { renderFromBody } from './viewHelpers';
-
+import Timestamp from './components/Timestamp';
+import { renderFromBody } from './view.helpers';
 import * as PrismicDOM from 'prismic-dom';
 
 interface HomeProps {
@@ -15,7 +15,7 @@ export default class Home extends React.Component<BaseLayoutProps & HomeProps> {
       <Page {...this.props}>
         <h2>Latest Posts</h2>
 
-        <ol>
+        <ol className="list-unstyled">
           {this.props.latestPosts.map((edge, i) => {
             return (
               <li key={i}>
@@ -25,15 +25,9 @@ export default class Home extends React.Component<BaseLayoutProps & HomeProps> {
                   </a>
                 </h5>
 
-                <time
-                  className="post-publish-time"
-                  style={{ color: 'gray' }}
+                <Timestamp
                   dateTime={edge.node._meta.firstPublicationDate}
-                >
-                  {new Date(
-                    edge.node._meta.firstPublicationDate,
-                  ).toLocaleString()}
-                </time>
+                ></Timestamp>
 
                 <p {...renderFromBody(edge.node.body)}></p>
 

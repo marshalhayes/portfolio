@@ -3,30 +3,35 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import reactExpressEngine from './react.engine';
-
-export const pathToStaticAssets = join(
-  __dirname.substring(0, __dirname.lastIndexOf('/')),
-  'static',
-);
-
-export const pathToViews = join(
-  __dirname.substring(0, __dirname.lastIndexOf('/')),
-  'views',
-);
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  // Disable stuff I don't need
+  app.disable('x-powered-by');
+  app.set('etag', false);
+
   // Configure paths to our static assets and views
-  app.setBaseViewsDir(pathToViews);
-  app.useStaticAssets(pathToStaticAssets, {
+  const currentDir = __dirname;
+
+  const viewPath = join(currentDir, '../../', 'views');
+  const assetsPath = join(currentDir, '../../', 'static');
+
+  app.setBaseViewsDir(viewPath);
+  app.useStaticAssets(assetsPath, {
     prefix: '/static',
+    etag: false
   });
+
+  const configService = app.get(ConfigService);
+  const port = parseInt(configService.get<string>('PORT'));
 
   // Use the custom react engine
   app.engine('tsx', reactExpressEngine);
   app.setViewEngine('tsx');
 
-  await app.listen(8000);
+    
+  await app.listen(port || 8000);
 }
 bootstrap();

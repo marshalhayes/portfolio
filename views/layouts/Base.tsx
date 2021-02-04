@@ -25,9 +25,16 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
               ? `${this.props.title} | Marshal Hayes`
               : 'Marshal Hayes'}
           </title>
+
+          <link rel="preload" as="style" href="/static/css/main.css" />
+          <link rel="stylesheet" href="/static/css/main.css" />
         </head>
 
-        <body>{this.props.children}</body>
+        <body>
+          {this.props.children}
+
+          <script src="/static/js/main.js" defer></script>
+        </body>
       </html>
     );
   }
