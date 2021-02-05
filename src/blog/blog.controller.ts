@@ -15,7 +15,7 @@ export class BlogController {
 
   @Get('/:uid')
   @Render('blog/post')
-  async getPost(@Param() uid: string) {
+  async getPost(@Param('uid') uid: string) {
     const post = await this.blogService.getPost(uid);
 
     return { post: post.data.post };

@@ -55,7 +55,9 @@ export class BlogService {
           }
         }
       `,
-      variables: uid,
+      variables: {
+        uid,
+      },
     });
 
     q.catch((e) => console.error(e));
