@@ -10,8 +10,8 @@ export function renderFromBody(body: any[]) {
     .map((slice) => {
       if (slice.type === 'text') {
         return slice.fields
-          .map((f) => PrismicDOM.RichText.asText(f.text))
-          .join(' ');
+          .map((f) => PrismicDOM.RichText.asHtml(f.text))
+          .join('');
       }
     })
     .join('');

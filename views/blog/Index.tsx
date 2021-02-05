@@ -1,22 +1,21 @@
 import * as React from 'react';
-import { BaseLayoutProps } from './layouts/Base';
-import Page from './layouts/Page';
-import Timestamp from './components/Timestamp';
-import { renderFromBody } from './view.helpers';
+import Page from '../layouts/Page';
 import * as PrismicDOM from 'prismic-dom';
+import Timestamp from '../components/Timestamp';
+import { renderFromBody } from '../view.helpers';
 
-interface HomeProps {
-  latestPosts: any[];
+interface BlogIndex {
+  posts?: any[];
 }
 
-export default class Home extends React.Component<BaseLayoutProps & HomeProps> {
+export default class Index extends React.Component<BlogIndex> {
   render() {
     return (
       <Page {...this.props}>
-        <h1>Latest Posts</h1>
+        <h1>Blogs</h1>
 
         <ol className="list-unstyled">
-          {this.props.latestPosts.map((edge, i) => {
+          {this.props.posts.map((edge, i) => {
             return (
               <li key={i} className="post-preview-wrapper">
                 <h3>
@@ -30,7 +29,7 @@ export default class Home extends React.Component<BaseLayoutProps & HomeProps> {
                   dateTime={edge.node._meta.firstPublicationDate}
                 ></Timestamp>
 
-                <p>{getPreviewText(edge.node.body)}</p>
+                <p {...renderFromBody(edge.node.body)}></p>
 
                 <a href={`/blog/${edge.node._meta.uid}`}>Read More</a>
               </li>
@@ -40,13 +39,4 @@ export default class Home extends React.Component<BaseLayoutProps & HomeProps> {
       </Page>
     );
   }
-}
-
-function getPreviewText(body: any[], maxLength = 125) {
-  return body
-    .map((slice) =>
-      slice.fields.map((f) => PrismicDOM.RichText.asText(f.text)).join(' '),
-    )
-    .join('')
-    .substring(0, maxLength);
 }

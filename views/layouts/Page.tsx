@@ -8,10 +8,12 @@ export default class Page extends React.Component<BaseLayoutProps> {
       <BaseLayout {...this.props}>
         <header>
           <div className="container flex-wrapper flex-items-center flex-content-between">
-            <div className="branding-wrapper">
-              <img src="/static/images/me.jpg" className="branding-img"></img>
-              <h1>Marshal Hayes</h1>
-            </div>
+            <a href="/">
+              <div className="branding-wrapper">
+                <img src="/static/images/me.jpg" className="branding-img"></img>
+                <h2>Marshal Hayes</h2>
+              </div>
+            </a>
 
             <Nav></Nav>
           </div>

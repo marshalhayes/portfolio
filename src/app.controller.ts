@@ -1,39 +1,14 @@
-import gql from 'graphql-tag';
 import { Controller, Get, Render } from '@nestjs/common';
-import { PrismicService } from './prismic/prismic.service';
+import { BlogService } from './blog/blog.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly prismicService: PrismicService) {}
+  constructor(private readonly blogService: BlogService) {}
 
   @Get()
   @Render('Home')
   async index() {
-    const posts = await this.prismicService.apolloClient.query({
-      query: gql`
-        query {
-          allPosts(sortBy: meta_firstPublicationDate_DESC) {
-            edges {
-              node {
-                _meta {
-                  uid
-                  firstPublicationDate
-                }
-                title
-                body {
-                  ... on PostBodyText {
-                    type
-                    fields {
-                      text
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      `,
-    });
+    const posts = await this.blogService.getPosts();
 
     return {
       latestPosts: posts.data.allPosts.edges,
