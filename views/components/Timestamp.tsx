@@ -2,6 +2,7 @@ import * as React from 'react';
 
 export default class Timestamp extends React.Component<{
   dateTime: Date | string;
+  className?: string;
   includeSeconds?: boolean;
 }> {
   static defaultProps = {
@@ -15,7 +16,7 @@ export default class Timestamp extends React.Component<{
     }
 
     return (
-      <time dateTime={date.toISOString()}>
+      <time dateTime={date.toISOString()} className={this.props.className}>
         {this.props.includeSeconds
           ? date.toLocaleString()
           : date.toLocaleDateString()}

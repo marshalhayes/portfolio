@@ -18,14 +18,15 @@ export default class Home extends React.Component<BaseLayoutProps & HomeProps> {
         <ol className="list-unstyled">
           {this.props.latestPosts.map((edge, i) => {
             return (
-              <li key={i}>
-                <h5 style={{ marginBottom: 0, fontSize: '18px' }}>
+              <li key={i} className="post-preview-wrapper">
+                <h3>
                   <a href={`/blog/${edge.node._meta.uid}`}>
                     {PrismicDOM.RichText.asText(edge.node.title)}
                   </a>
-                </h5>
+                </h3>
 
                 <Timestamp
+                  className="post-date"
                   dateTime={edge.node._meta.firstPublicationDate}
                 ></Timestamp>
 

@@ -28,13 +28,16 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
 
           <link rel="preload" as="style" href="/static/css/main.css" />
           <link rel="stylesheet" href="/static/css/main.css" />
+          <link rel="stylesheet" href="/static/css/blog.css" />
+
+          <link
+            rel="shortcut icon"
+            href="/static/images/me.jpg"
+            type="image/jpg"
+          />
         </head>
 
-        <body>
-          {this.props.children}
-
-          <script src="/static/js/main.js" defer></script>
-        </body>
+        <body>{this.props.children}</body>
       </html>
     );
   }

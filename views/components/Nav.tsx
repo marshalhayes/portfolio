@@ -4,7 +4,7 @@ export default class Nav extends React.Component {
   render() {
     return (
       <nav>
-        <ul className="list-unstyled nav-items">
+        <ul className="list-unstyled nav-items" role="nav">
           <li>
             <a href="/blog">Blog</a>
           </li>
