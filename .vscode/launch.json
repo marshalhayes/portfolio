@@ -1,0 +1,13 @@
+{
+  "configurations": [
+    {
+      "name": "NestJS Framework",
+      "request": "attach",
+      "port": 9229,
+      "restart": true,
+      "stopOnEntry": false,
+      "protocol": "inspector",
+      "type": "node"
+    }
+  ]
+}

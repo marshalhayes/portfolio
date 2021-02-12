@@ -1,0 +1,26 @@
+aside {
+  padding: 1em;
+
+  @include propWithVarOverride('background-color', $muted-color, 'muted-color');
+  @include propWithVarOverride('border-color', $link-color, 'link-color');
+
+  border-width: 5px;
+  border-top-width: 0;
+  border-right-width: 0;
+  border-style: solid;
+
+  max-width: 350px;
+  box-shadow: 5px 5px;
+
+  .aside-img {
+    float: right;
+    height: 100px;
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: 48em) {
+  aside {
+    max-width: unset;
+  }
+}

@@ -1,0 +1,67 @@
+$types: (
+  'm': 'margin',
+  'p': 'padding',
+);
+
+@for $i from 0 through 5 {
+  @each $type, $prop in $types {
+    .#{$type}-#{$i} {
+      #{$prop}: #{$i}em;
+    }
+
+    .#{$type}l-#{$i} {
+      #{$prop}-left: #{$i}em;
+    }
+
+    .#{$type}r-#{$i} {
+      #{$prop}-right: #{$i}em;
+    }
+
+    .#{$type}x-#{$i} {
+      #{$prop}-left: #{$i}em;
+      #{$prop}-right: #{$i}em;
+    }
+
+    .#{$type}y-#{$i} {
+      #{$prop}-top: #{$i}em;
+      #{$prop}-bottom: #{$i}em;
+    }
+
+    .#{$type}t-#{$i} {
+      #{$prop}-top: #{$i}em;
+    }
+
+    .#{$type}b-#{$i} {
+      #{$prop}-bottom: #{$i}em;
+    }
+  }
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+$displays: (
+  'block',
+  'inline-block',
+  'inline',
+  'flex',
+  'grid',
+  'table',
+  'table-cell'
+);
+
+@each $display in $displays {
+  .d-#{$display} {
+    display: #{$display};
+  }
+}
+
+$alignments: ('left', 'right', 'center');
+
+@each $alignment in $alignments {
+  .text-#{$alignment} {
+    text-align: $alignment;
+  }
+}

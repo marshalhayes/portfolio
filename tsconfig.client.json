@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2020", "DOM"],
+    "target": "ES5"
+  },
+  "include": ["ui/js/*.ts"]
+}

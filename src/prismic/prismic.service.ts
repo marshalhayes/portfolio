@@ -16,21 +16,7 @@ import { PrismicConfig } from 'config/prismic.config';
  */
 @Injectable({ scope: Scope.REQUEST })
 export class PrismicService {
-  /**
-   * Delay instantiating the cache until needed
-   *
-   * TODO: Switch this out with something better in prod?
-   * How to clear/update the cache when refs are changed?
-   */
-  private static _cache: ApolloCache<NormalizedCacheObject>;
-  private static get cache() {
-    if (!PrismicService._cache) {
-      PrismicService._cache = new InMemoryCache();
-    }
-
-    return PrismicService._cache;
-  }
-
+  private static latestSuccessfulRef: string;
   private readonly config: PrismicConfig;
 
   /**
@@ -44,11 +30,14 @@ export class PrismicService {
 
     this.apolloClient = new ApolloClient({
       link: setContext(async (_req: GraphQLRequest, previousContext: any) => {
-        const latestMasterRef = await this.getLatestMasterRef();
+        const latestRef = await this.getLatestRef();
+        if (latestRef !== null) {
+          PrismicService.latestSuccessfulRef = latestRef;
+        }
 
         return {
           headers: {
-            'Prismic-Ref': latestMasterRef,
+            'Prismic-Ref': PrismicService.latestSuccessfulRef,
             Authorization: `Token ${this.config.accessToken}`,
             ...previousContext.headers,
           },
@@ -60,15 +49,16 @@ export class PrismicService {
           fetch: require('node-fetch'),
         }),
       ),
-      cache: PrismicService.cache,
+      // TODO: Improve this
+      cache: new InMemoryCache(),
     });
   }
 
   /**
    * Returns a promise that will resolve to the lastest master ref
-   * in Prismic
+   * in Prismic or null if it fails
    */
-  getLatestMasterRef() {
+  getLatestRef(): Promise<string | null> {
     return this.http
       .get(this.config.apiEndpoint, {
         params: {
@@ -76,6 +66,10 @@ export class PrismicService {
         },
       })
       .toPromise()
-      .then((res) => res.data.refs.find((r) => r.isMasterRef).ref);
+      .then(
+        (res) => res.data.refs.find((r) => r.isMasterRef).ref,
+        () => null,
+      )
+      .catch(() => null);
   }
 }

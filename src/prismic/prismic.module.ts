@@ -4,7 +4,13 @@ import { PrismicService } from './prismic.service';
 import prismicConfig from 'config/prismic.config';
 
 @Module({
-  imports: [ConfigModule.forFeature(prismicConfig), HttpModule],
+  imports: [
+    ConfigModule.forFeature(prismicConfig),
+    HttpModule.register({
+      timeout: 1000,
+      timeoutErrorMessage: 'TIMEOUT',
+    }),
+  ],
   providers: [PrismicService],
   exports: [PrismicService],
 })

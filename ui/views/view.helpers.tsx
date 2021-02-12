@@ -1,4 +1,5 @@
 import * as PrismicDOM from 'prismic-dom';
+import Prism from 'prismjs';
 
 /**
  * Dynamically render the Prismic body (slices)
@@ -12,6 +13,18 @@ export function renderFromBody(body: any[]) {
         return slice.fields
           .map((f) => PrismicDOM.RichText.asHtml(f.text))
           .join('');
+      }
+
+      if (slice.type === 'code_snippet') {
+        const lang = 'html';
+        const grammar = Prism.languages[lang];
+        const snippet = PrismicDOM.RichText.asText(slice.primary.snippet);
+
+        return `<code class="code-snippet">${Prism.highlight(
+          snippet,
+          grammar,
+          lang,
+        )}</code>`;
       }
     })
     .join('');

@@ -1,0 +1,9 @@
+.post-preview {
+  .post-title {
+    margin-bottom: 0.25em;
+  }
+
+  .post-timestamp {
+    @include propWithVarOverride('color', $muted-color, 'muted-color');
+  }
+}

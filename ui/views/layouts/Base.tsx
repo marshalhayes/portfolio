@@ -2,13 +2,15 @@ import * as React from 'react';
 
 export type BaseLayoutProps = {
   title?: string;
+  canonicalUrl?: string;
   description?: string;
+  bodyClassName?: string;
 };
 
 export default class BaseLayout extends React.Component<BaseLayoutProps> {
   render() {
     return (
-      <html>
+      <html className="dark">
         <head>
           <meta
             name="viewport"
@@ -26,18 +28,25 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
               : 'Marshal Hayes'}
           </title>
 
-          <link rel="preload" as="style" href="/static/css/main.css" />
-          <link rel="stylesheet" href="/static/css/main.css" />
-          <link rel="stylesheet" href="/static/css/blog.css" />
+          {this.props.canonicalUrl?.length > 0 ? (
+            <link rel="canonical" href={this.props.canonicalUrl} />
+          ) : null}
+
+          <link rel="preload" as="style" href="/public/css/main.bundle.css" />
+          <link rel="stylesheet" href="/public/css/main.bundle.css" />
 
           <link
             rel="shortcut icon"
-            href="/static/images/me.jpg"
+            href="/public/images/me.jpg"
             type="image/jpg"
           />
         </head>
 
-        <body>{this.props.children}</body>
+        <body className={this.props.bodyClassName}>
+          {this.props.children}
+
+          <script src="/public/js/main.bundle.js" defer></script>
+        </body>
       </html>
     );
   }

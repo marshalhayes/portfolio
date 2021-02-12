@@ -15,13 +15,13 @@ async function bootstrap() {
   // Configure paths to our static assets and views
   const currentDir = __dirname;
 
-  const viewPath = join(currentDir, '../../', 'views');
-  const assetsPath = join(currentDir, '../../', 'static');
+  const viewPath = join(currentDir, '../../ui/', 'views');
+  const assetsPath = join(currentDir, '../../', 'public');
 
   app.setBaseViewsDir(viewPath);
   app.useStaticAssets(assetsPath, {
-    prefix: '/static',
-    etag: false
+    prefix: '/public',
+    etag: false,
   });
 
   const configService = app.get(ConfigService);
@@ -31,7 +31,6 @@ async function bootstrap() {
   app.engine('tsx', reactExpressEngine);
   app.setViewEngine('tsx');
 
-    
   await app.listen(port || 8000);
 }
 bootstrap();

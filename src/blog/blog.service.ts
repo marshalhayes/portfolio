@@ -35,7 +35,7 @@ export class BlogService {
   }
 
   getPost(uid: string) {
-    const q = this.prismicService.apolloClient.query({
+    return this.prismicService.apolloClient.query({
       query: gql`
         query post($uid: String!) {
           post(uid: $uid, lang: "en-us") {
@@ -51,6 +51,12 @@ export class BlogService {
                   text
                 }
               }
+              ... on PostBodyCode_snippet {
+                type
+                primary {
+                  snippet
+                }
+              }
             }
           }
         }
@@ -59,9 +65,5 @@ export class BlogService {
         uid,
       },
     });
-
-    q.catch((e) => console.error(e));
-
-    return q;
   }
 }

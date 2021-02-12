@@ -1,0 +1,7 @@
+body {
+  font-family: $base-font-family;
+}
+
+a[href] {
+  @include propWithVarOverride('color', $link-color, 'link-color');
+}

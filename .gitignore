@@ -38,4 +38,4 @@ lerna-debug.log*
 .env
 
 # Temp directories
-.rollup-cache/
+.rollup.cache/

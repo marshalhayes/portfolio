@@ -1,0 +1,12 @@
+.pure-menu-link {
+  &:hover,
+  &:focus {
+    color: inherit;
+    background-color: inherit;
+  }
+}
+
+.pure-button-primary {
+  @include propWithVarOverride('background-color', $link-color, 'link-color');
+  @include propWithVarOverride('color', $body-bg, 'body-bg');
+}
