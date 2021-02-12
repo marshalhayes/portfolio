@@ -4,13 +4,12 @@ export type BaseLayoutProps = {
   title?: string;
   canonicalUrl?: string;
   description?: string;
-  bodyClassName?: string;
 };
 
 export default class BaseLayout extends React.Component<BaseLayoutProps> {
   render() {
     return (
-      <html className="dark">
+      <html className="dark" dir="ltr" lang="en">
         <head>
           <meta
             name="viewport"
@@ -32,8 +31,8 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
             <link rel="canonical" href={this.props.canonicalUrl} />
           ) : null}
 
-          <link rel="preload" as="style" href="/public/css/main.bundle.css" />
-          <link rel="stylesheet" href="/public/css/main.bundle.css" />
+          <link rel="preload" as="style" href="/public/css/main.css" />
+          <link rel="stylesheet" href="/public/css/main.css" />
 
           <link
             rel="shortcut icon"
@@ -42,7 +41,7 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
           />
         </head>
 
-        <body className={this.props.bodyClassName}>
+        <body className="bg-white dark:bg-black text-black dark:text-gray-100">
           {this.props.children}
 
           <script src="/public/js/main.bundle.js" defer></script>

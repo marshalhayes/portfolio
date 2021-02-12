@@ -4,14 +4,14 @@ import BaseLayout, { BaseLayoutProps } from './Base';
 export default class PageWithAsideLayout extends React.Component<BaseLayoutProps> {
   render() {
     return (
-      <BaseLayout {...{ bodyClassName: 'aside-collapsed', ...this.props }}>
-        <div className="pure-g">
-          <main className="pure-u-1 pure-u-lg-3-4">
+      <BaseLayout {...this.props}>
+        <section className="flex flex-col lg:flex-row">
+          <main className="container px-3">
             <a
               href="/blog"
-              className="d-inline-block mt-1"
               style={{ textDecoration: 'none' }}
               title="Return to blog"
+              className="text-sizzling-red"
             >
               &lt; Go back
             </a>
@@ -19,28 +19,31 @@ export default class PageWithAsideLayout extends React.Component<BaseLayoutProps
             {this.props.children}
           </main>
 
-          <div className="pure-u-1 pure-u-lg-1-4">
-            <aside>
-              <h4 className="m-0">About the Author</h4>
+          <aside className="px-3 lg:px-0 xs:max-w-full sm:max-w-sm">
+            <div className="p-5 shadow-lg dark:text-white border-l-4 border-b-4 border-sizzling-red dark:bg-gray-900">
+              <div className="font-medium">
+                <h3 className="mb-3">About the Author</h3>
+              </div>
 
-              <img
-                src="/public/images/me.jpg"
-                className="pure-img mb-1 mx-auto aside-img"
-                style={{ maxHeight: '175px' }}
-                alt="A selfie of me wearing a black cloth facemask"
-              />
+              <div className="flex flex-row-reverse">
+                <div className="mx-auto">
+                  <img src="/public/images/me.jpg" loading="lazy" alt="" />
+                </div>
 
-              <p>
-                Marshal Hayes is a Software Engineer currently working at MCR
-                Safety in Tennessee.
-              </p>
+                <div>
+                  <p>
+                    Marshal Hayes is a Software Engineer at MCR Safety in
+                    Tennessee.
+                  </p>
 
-              <p>
-                <a href="/about">Read more</a>
-              </p>
-            </aside>
-          </div>
-        </div>
+                  <p>
+                    <a href="/about">Read more</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
       </BaseLayout>
     );
   }

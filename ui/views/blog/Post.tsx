@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PrismicDOM from 'prismic-dom';
 import { renderFromBody } from '../view.helpers';
 import PageWithAsideLayout from '../layouts/PageWithAside';
-import DisqusComments from './partials/Comments';
+import Timestamp from '../components/Timestamp';
 
 interface PostProps {
   post: any;
@@ -14,18 +14,16 @@ export default class Post extends React.Component<PostProps> {
 
     return (
       <PageWithAsideLayout {...{ title, ...this.props }}>
-        <h1>{title}</h1>
+        <h1 className="mb-1">{title}</h1>
 
-        <div
-          id="content"
-          className="mb-2"
-          {...renderFromBody(this.props.post.body)}
-        ></div>
+        <div id="metadata" className="mb-5 text-gray-400">
+          Posted{' '}
+          <Timestamp
+            dateTime={this.props.post._meta.firstPublicationDate}
+          ></Timestamp>
+        </div>
 
-        {process.env.NODE_ENV === 'production' ? (
-          <DisqusComments></DisqusComments>
-        ) : null}
-
+        <div id="content" {...renderFromBody(this.props.post.body)}></div>
         <link rel="stylesheet" href="/public/css/prism.css" />
       </PageWithAsideLayout>
     );

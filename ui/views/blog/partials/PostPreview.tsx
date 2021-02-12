@@ -9,20 +9,22 @@ interface PostPreviewProps {
 export default class PostPreview extends React.Component<PostPreviewProps> {
   render() {
     return (
-      <div className="post-preview">
-        <h3 className="post-title">
-          <a href={`/blog/${this.props.post.node._meta.uid}`}>
+      <>
+        <h3 className="text-2xl">
+          <a
+            href={`/blog/${this.props.post.node._meta.uid}`}
+            className="text-sizzling-red"
+          >
             {PrismicDOM.RichText.asText(this.props.post.node.title)}
           </a>
         </h3>
 
         <Timestamp
-          className="post-timestamp"
           dateTime={this.props.post.node._meta.firstPublicationDate}
         ></Timestamp>
 
         <p>{getPreviewText(this.props.post.node.body)}</p>
-      </div>
+      </>
     );
   }
 }

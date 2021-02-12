@@ -10,15 +10,20 @@ export default class Home extends React.Component<BaseLayoutProps & HomeProps> {
   render() {
     return (
       <BaseLayout {...this.props}>
-        <h1>Latest Posts</h1>
+        <main className="container mx-auto px-3">
+          <h1>Latest Posts</h1>
 
-        <ul className="pure-menu-list">
-          {this.props.latestPosts.map((post, i) => (
-            <li key={i} className="pure-menu-item">
-              <PostPreview post={post}></PostPreview>
-            </li>
-          ))}
-        </ul>
+          <ul>
+            {this.props.latestPosts.map((post, i) => (
+              <li
+                key={i}
+                className={i < this.props.latestPosts.length - 1 ? 'mb-5' : ''}
+              >
+                <PostPreview post={post}></PostPreview>
+              </li>
+            ))}
+          </ul>
+        </main>
       </BaseLayout>
     );
   }

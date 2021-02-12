@@ -20,11 +20,13 @@ export function renderFromBody(body: any[]) {
         const grammar = Prism.languages[lang];
         const snippet = PrismicDOM.RichText.asText(slice.primary.snippet);
 
-        return `<code class="code-snippet">${Prism.highlight(
-          snippet,
-          grammar,
-          lang,
-        )}</code>`;
+        return `<div class="code-snippet relative">
+            <code class="lang-${lang}">
+              ${Prism.highlight(snippet, grammar, lang)}
+            </code>
+
+            <button class="absolute top-0 right-0 pr-6 pt-3 copy-snippet">Copy</button>
+          </div>`.replace(/\s\s+/g, ' ');
       }
     })
     .join('');

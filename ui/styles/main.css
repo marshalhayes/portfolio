@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply min-h-full;
+    @apply border-l-4;
+    @apply border-b-4;
+    @apply border-sizzling-red;
+  }
+
+  h1 {
+    @apply text-4xl;
+    @apply my-3;
+  }
+
+  h2 {
+    @apply text-3xl;
+    @apply my-2;
+  }
+
+  h3 {
+    @apply text-2xl;
+    @apply my-1;
+  }
+
+  a {
+    @apply text-sizzling-red;
+    @apply underline;
+  }
+
+  p {
+    @apply mb-2;
+  }
+}
+
+@layer components {
+  code {
+    @apply block;
+    @apply px-6 py-3;
+    @apply my-3;
+
+    background-color: #26292c;
+    @apply dark:bg-gray-900;
+  }
+
+  .code-snippet .copy-snippet {
+    opacity: 0;
+    transition: opacity 255ms ease-in-out;
+    visibility: hidden;
+  }
+
+  .code-snippet:hover .copy-snippet {
+    visibility: visible;
+    opacity: 1;
+  }
+}

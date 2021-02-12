@@ -1,4 +1,0 @@
-@mixin propWithVarOverride($prop, $initial, $varOverride) {
-  #{$prop}: #{$initial};
-  #{$prop}: var(--#{$varOverride});
-}

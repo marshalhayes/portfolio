@@ -14,7 +14,7 @@ export default class DisqusComments extends React.Component {
         </noscript>
 
         <div id="disqus_thread"></div>
-        <script src="/public/js/post.bundle.js" defer></script>
+        <script src="/public/js/comments.bundle.js" defer></script>
       </div>
     );
   }

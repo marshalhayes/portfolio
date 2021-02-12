@@ -10,15 +10,20 @@ export default class Index extends React.Component<BlogIndex> {
   render() {
     return (
       <BaseLayout {...this.props}>
-        <h1>Blogs</h1>
+        <main className="container mx-auto px-3">
+          <h1>Blogs</h1>
 
-        <ul className="pure-menu-list">
-          {this.props.posts.map((post, i) => (
-            <li key={i} className="pure-menu-item">
-              <PostPreview post={post}></PostPreview>
-            </li>
-          ))}
-        </ul>
+          <ul>
+            {this.props.posts.map((post, i) => (
+              <li
+                key={i}
+                className={i < this.props.posts.length - 1 ? 'mb-5' : ''}
+              >
+                <PostPreview post={post}></PostPreview>
+              </li>
+            ))}
+          </ul>
+        </main>
       </BaseLayout>
     );
   }

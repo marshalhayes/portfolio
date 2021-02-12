@@ -1,5 +1,4 @@
 import {
-  ApolloCache,
   ApolloClient,
   GraphQLRequest,
   HttpLink,
