@@ -1,5 +1,6 @@
 import * as PrismicDOM from 'prismic-dom';
 import Prism from 'prismjs';
+import { createHash } from 'crypto';
 
 /**
  * Dynamically render the Prismic body (slices)
@@ -20,13 +21,16 @@ export function renderFromBody(body: any[]) {
         const grammar = Prism.languages[lang];
         const snippet = PrismicDOM.RichText.asText(slice.primary.snippet);
 
+        // This may be overkill, but hash the snippet so we can use it as a unique ID
+        const snippetHash = createHash('sha256').update(snippet).digest('hex');
+
         return `<div class="code-snippet relative">
-            <code class="lang-${lang}">
+            <code class="lang-${lang}" id="snippet-${snippetHash}">
               ${Prism.highlight(snippet, grammar, lang)}
             </code>
 
-            <button class="absolute top-0 right-0 pr-6 pt-3 copy-snippet">Copy</button>
-          </div>`.replace(/\s\s+/g, ' ');
+            <button class="absolute top-0 right-0 pr-6 pt-3 copy-snippet" data-target="#snippet-${snippetHash}">Copy</button>
+          </div>`;
       }
     })
     .join('');

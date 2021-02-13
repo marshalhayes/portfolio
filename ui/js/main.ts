@@ -1,3 +1,5 @@
+import './utils/snippets';
+
 const setTheme = (theme: 'light' | 'dark', save = false) => {
   document.documentElement.classList.remove('light', 'dark');
   document.documentElement.classList.add(theme);
@@ -14,9 +16,9 @@ const getTheme = () => {
 const detectAndSetPreferredTheme = () => {
   let theme = localStorage.getItem('preferredTheme') as 'light' | 'dark';
   if (!theme) {
-    theme = window.matchMedia?.('(prefers-color-scheme: dark').matches
-      ? 'dark'
-      : 'light';
+    theme = window.matchMedia?.('(prefers-color-scheme: light)').matches
+      ? 'light'
+      : 'dark';
   }
 
   setTheme(theme);

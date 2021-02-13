@@ -3,16 +3,16 @@ import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import { readdirSync } from 'fs';
 
+const isDebug = process.env.NODE_ENV !== 'production';
 const inputBase = 'ui/js';
 const outputBase = 'public/js';
-const shouldSourcemap = process.env.NODE_ENV !== 'production';
 
 const jsBundle = (name) => {
   return {
     context: 'window',
     input: `${inputBase}/${name}.ts`,
     output: {
-      sourcemap: shouldSourcemap ? 'inline' : false,
+      sourcemap: isDebug,
       file: `${outputBase}/${name}.bundle.js`,
       format: 'iife',
     },
@@ -20,7 +20,7 @@ const jsBundle = (name) => {
       nodeResolve(),
       typescript({
         tsconfig: 'tsconfig.client.json',
-        sourceMap: shouldSourcemap,
+        sourceMap: isDebug,
       }),
       terser(),
     ],

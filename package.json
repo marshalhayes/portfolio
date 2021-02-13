@@ -6,7 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "rimraf dist && run-p build:client:*",
+    "prebuild": "rimraf dist && yarn run build:client",
+    "build:client": "run-p build:client:*",
     "build:client:js": "rollup -c rollup.config.js",
     "build:client:css": "postcss ui/styles/main.css -o public/css/main.css",
     "build": "nest build",
