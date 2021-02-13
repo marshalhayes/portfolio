@@ -27,7 +27,7 @@ export default class Post extends React.Component<PostProps> {
       <BaseLayout>
         <div className="container mx-auto sm:px-3">
           <section className="flex flex-col lg:flex-row justify-between">
-            <main className="px-3">
+            <main className="w-full px-3 my-4">
               <a
                 href="/"
                 title="Return to blog"
@@ -48,7 +48,7 @@ export default class Post extends React.Component<PostProps> {
               <div id="content" {...renderFromBody(this.props.post.body)}></div>
             </main>
 
-            <aside className="px-3 lg:px-0 xs:max-w-full sm:max-w-sm mb-4">
+            <aside className="px-3 lg:px-0 max-w-full lg:max-w-sm">
               <div className="p-5 shadow-lg dark:text-white border-l-4 border-b-4 border-sizzling-red dark:bg-gray-900">
                 <div className="font-medium">
                   <h3 className="mb-3">About the Author</h3>
