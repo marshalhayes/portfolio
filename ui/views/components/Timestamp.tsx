@@ -9,17 +9,23 @@ export default class Timestamp extends React.Component<{
     includeSeconds: false,
   };
 
-  render() {
-    const date = new Date(this.props.dateTime);
-    if (!this.props.includeSeconds) {
-      date.setSeconds(0, 0);
-    }
+  private readonly date: Date;
 
+  constructor(props) {
+    super(props);
+
+    this.date = new Date(props.dateTime);
+    if (!props.includeSeconds) {
+      this.date.setSeconds(0, 0);
+    }
+  }
+
+  render() {
     return (
-      <time dateTime={date.toISOString()} className={this.props.className}>
+      <time dateTime={this.date.toISOString()} className={this.props.className}>
         {this.props.includeSeconds
-          ? date.toLocaleString()
-          : date.toLocaleDateString()}
+          ? this.date.toLocaleString()
+          : this.date.toLocaleDateString()}
       </time>
     );
   }

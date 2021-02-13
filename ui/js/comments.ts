@@ -22,7 +22,7 @@ function loadComments() {
 
   Object.keys(props).forEach((p) => script.setAttribute(p, props[p]));
 
-  document.body.insertAdjacentElement('beforeend', script);
+  document.head.insertAdjacentElement('beforeend', script);
 }
 
 const wrapper = document.getElementById('disqus-wrapper');

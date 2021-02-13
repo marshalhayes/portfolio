@@ -12,7 +12,7 @@ const jsBundle = (name) => {
     context: 'window',
     input: `${inputBase}/${name}.ts`,
     output: {
-      sourcemap: shouldSourcemap,
+      sourcemap: shouldSourcemap ? 'inline' : false,
       file: `${outputBase}/${name}.bundle.js`,
       format: 'iife',
     },

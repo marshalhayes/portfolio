@@ -1,22 +1,28 @@
-import * as React from 'react';
+import React from 'react';
 import * as PrismicDOM from 'prismic-dom';
 import { renderFromBody } from '../view.helpers';
 import Timestamp from '../components/Timestamp';
 import BaseLayout from '../layouts/Base';
 import DisqusComments from './partials/Comments';
-import { BlogPost } from 'src/blog/blog.models';
+import { BlogPostResponse } from 'src/blog/blog.models';
 
 interface PostProps {
-  post: BlogPost;
+  post: BlogPostResponse;
 }
 
 export default class Post extends React.Component<PostProps> {
-  render() {
-    const title = PrismicDOM.RichText.asText(this.props.post.title);
-    const renderComments =
-      this.props.post.comments_enabled === null ||
-      this.props.post.comments_enabled;
+  private readonly title: string;
+  private readonly renderComments: boolean;
 
+  constructor(props) {
+    super(props);
+
+    this.title = PrismicDOM.RichText.asText(this.props.post.title);
+    this.renderComments =
+      props.post.comments_enabled === null || props.post.comments_enabled;
+  }
+
+  render() {
     return (
       <BaseLayout>
         <div className="container mx-auto sm:px-3">
@@ -30,7 +36,7 @@ export default class Post extends React.Component<PostProps> {
                 &lt; Go back
               </a>
 
-              <h1 className="mb-1">{title}</h1>
+              <h1 className="mb-1">{this.title}</h1>
 
               <div id="metadata" className="mb-5 text-gray-400">
                 Posted{' '}
@@ -42,7 +48,7 @@ export default class Post extends React.Component<PostProps> {
               <div id="content" {...renderFromBody(this.props.post.body)}></div>
             </main>
 
-            <aside className="px-3 lg:px-0 xs:max-w-full sm:max-w-sm">
+            <aside className="px-3 lg:px-0 xs:max-w-full sm:max-w-sm mb-4">
               <div className="p-5 shadow-lg dark:text-white border-l-4 border-b-4 border-sizzling-red dark:bg-gray-900">
                 <div className="font-medium">
                   <h3 className="mb-3">About the Author</h3>
@@ -50,7 +56,7 @@ export default class Post extends React.Component<PostProps> {
 
                 <div className="flex flex-row-reverse">
                   <div className="mx-auto">
-                    <img src="/public/images/me.jpg" loading="lazy" alt="" />
+                    <img src="/public/images/me.jpg" alt="" />
                   </div>
 
                   <div>
@@ -68,7 +74,7 @@ export default class Post extends React.Component<PostProps> {
             </aside>
           </section>
 
-          {renderComments ? (
+          {this.renderComments ? (
             <div className="px-3">
               <DisqusComments></DisqusComments>
             </div>

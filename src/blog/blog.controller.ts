@@ -12,10 +12,10 @@ import { BlogService } from './blog.service';
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
-  @Get('/:uid')
+  @Get(':uid')
   @Render('blog/post')
   async getPost(@Param('uid') uid: string) {
-    const post = await this.blogService.getPost(uid);
+    const post = await this.blogService.getPostByUid(uid);
     if (post === null) {
       throw new HttpException(null, HttpStatus.NOT_FOUND);
     }

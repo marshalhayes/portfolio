@@ -3,7 +3,7 @@ import React from 'react';
 export default class DisqusComments extends React.Component {
   render() {
     return (
-      <div id="disqus-wrapper">
+      <div id="disqus-wrapper" className="my-2">
         <noscript>
           <a href="https://disqus.com" rel="noopener">
             Disqus
