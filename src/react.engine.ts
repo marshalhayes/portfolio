@@ -1,6 +1,7 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import babelRegister from '@babel/register';
+import { format } from 'prettier';
 
 export default async function reactExpressEngine(
   path: string,
@@ -29,11 +30,20 @@ export default async function reactExpressEngine(
 
     // Dynamically import the view and render it as HTML markup
     const reactComponent = (await import(path)).default as React.ComponentClass;
-    const renderedMarkup = renderToStaticMarkup(
-      createElement(reactComponent, options),
-    );
+    let renderedMarkup =
+      '<!DOCTYPE html>' +
+      renderToStaticMarkup(createElement(reactComponent, options));
 
-    cb(null, `<!DOCTYPE html>${renderedMarkup}`);
+    // It's hard to debug in dev tools when there's no whitespace, so add it back when not in prod lol
+    if (process.env.NODE_ENV !== 'production') {
+      renderedMarkup = format(renderedMarkup, {
+        parser: 'html',
+        htmlWhitespaceSensitivity: 'css',
+        tabWidth: 2,
+      });
+    }
+
+    cb(null, renderedMarkup);
   } catch (e) {
     cb(e, null);
   }

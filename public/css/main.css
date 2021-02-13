@@ -660,6 +660,10 @@ code {
   flex-direction: column;
 }
 
+.justify-between {
+  justify-content: space-between;
+}
+
 .font-medium {
   font-weight: 500;
 }
@@ -766,6 +770,10 @@ code {
   color: rgba(243, 244, 246, var(--tw-text-opacity));
 }
 
+.no-underline {
+  text-decoration: none;
+}
+
 @-webkit-keyframes spin {
   to {
     transform: rotate(360deg);
@@ -835,6 +843,11 @@ code {
 @media (min-width: 640px) {
   .sm\:max-w-sm {
     max-width: 24rem;
+  }
+
+  .sm\:px-3 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
 }
 
