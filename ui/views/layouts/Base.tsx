@@ -31,8 +31,8 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
             <link rel="canonical" href={this.props.canonicalUrl} />
           ) : null}
 
-          <link rel="preload" as="style" href="/public/css/main.css" />
-          <link rel="stylesheet" href="/public/css/main.css" />
+          <link rel="preload" as="style" href="/public/css/main.bundle.css" />
+          <link rel="stylesheet" href="/public/css/main.bundle.css" />
 
           <link
             rel="shortcut icon"
