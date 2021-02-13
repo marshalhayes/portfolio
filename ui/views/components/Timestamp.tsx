@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 export default class Timestamp extends React.Component<{
   dateTime: Date | string | number;

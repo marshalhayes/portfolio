@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Timestamp from '../../components/Timestamp';
 import PrismicDOM from 'prismic-dom';
 
