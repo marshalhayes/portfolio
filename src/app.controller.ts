@@ -8,10 +8,10 @@ export class AppController {
   @Get()
   @Render('Home')
   async index() {
-    const posts = await this.blogService.getPosts();
+    const posts = await this.blogService.getPosts(3);
 
     return {
-      latestPosts: posts.data.allPosts.edges,
+      latestPosts: posts?.edges,
     };
   }
 }
