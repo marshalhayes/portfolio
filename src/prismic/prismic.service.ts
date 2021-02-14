@@ -6,7 +6,7 @@ import {
   NormalizedCacheObject,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { HttpService, Inject, Injectable, Req, Scope } from '@nestjs/common';
+import { HttpService, Inject, Injectable, Scope } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismicConfig } from 'config/prismic.config';
 import { Request } from 'express';

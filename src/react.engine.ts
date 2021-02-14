@@ -1,7 +1,6 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import babelRegister from '@babel/register';
-import { format } from 'prettier';
 
 export default async function reactExpressEngine(
   path: string,
