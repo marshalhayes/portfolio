@@ -2,14 +2,11 @@ import React from 'react';
 import * as PrismicDOM from 'prismic-dom';
 import { renderFromBody } from '../view.helpers';
 import Timestamp from '../components/Timestamp';
-import BaseLayout from '../layouts/Base';
+import BaseLayout, { BaseLayoutProps } from '../layouts/Base';
 import DisqusComments from './partials/Comments';
 import { BlogPostResponse } from 'src/blog/blog.models';
 
-interface PostProps {
-  post: BlogPostResponse;
-  isPreview: boolean;
-}
+type PostProps = { post: BlogPostResponse } & BaseLayoutProps;
 
 export default class Post extends React.Component<PostProps> {
   private readonly title: string;
@@ -25,7 +22,7 @@ export default class Post extends React.Component<PostProps> {
 
   render() {
     return (
-      <BaseLayout>
+      <BaseLayout {...this.props}>
         <div className="container mx-auto sm:px-3">
           <section className="flex flex-col lg:flex-row justify-between">
             <main className="w-full px-3 my-4">

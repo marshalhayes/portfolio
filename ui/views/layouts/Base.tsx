@@ -2,6 +2,7 @@ import React from 'react';
 
 export type BaseLayoutProps = {
   title?: string;
+  isPreview?: boolean;
   canonicalUrl?: string;
   description?: string;
 };
@@ -43,6 +44,12 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
 
         <body className="bg-white dark:bg-black text-black dark:text-gray-100">
           {this.props.children}
+
+          {this.props.isPreview ? (
+            <div className="fixed top-0 right-0 mr-3 mt-3 px-3 py-2 bg-gray-900 text-white rounded">
+              Preview Mode
+            </div>
+          ) : null}
 
           <script src="/public/js/main.bundle.js" defer></script>
         </body>
