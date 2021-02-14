@@ -4,6 +4,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import reactExpressEngine from './react.engine';
 import { ConfigService } from '@nestjs/config';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -23,6 +24,8 @@ async function bootstrap() {
     prefix: '/public',
     etag: false,
   });
+
+  app.use(cookieParser());
 
   const configService = app.get(ConfigService);
   const port = parseInt(configService.get<string>('PORT'));

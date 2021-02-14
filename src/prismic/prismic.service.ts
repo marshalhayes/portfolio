@@ -6,9 +6,11 @@ import {
   NormalizedCacheObject,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { HttpService, Injectable, Scope } from '@nestjs/common';
+import { HttpService, Inject, Injectable, Req, Scope } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismicConfig } from 'config/prismic.config';
+import { Request } from 'express';
+import { REQUEST } from '@nestjs/core';
 
 /**
  * This service serves as a wrapper to the Prismic graphql api.
@@ -24,15 +26,24 @@ export class PrismicService {
    */
   readonly apolloClient: ApolloClient<NormalizedCacheObject>;
 
-  constructor(private readonly http: HttpService, config: ConfigService) {
+  constructor(
+    private readonly http: HttpService,
+    @Inject(REQUEST) private readonly req: Request,
+    config: ConfigService,
+  ) {
     this.config = config.get<PrismicConfig>('prismic');
 
     this.apolloClient = new ApolloClient({
       link: setContext(async (_req: GraphQLRequest, previousContext: any) => {
-        const latestRef = await this.getLatestRef();
-        if (latestRef !== null) {
-          PrismicService.latestSuccessfulRef = latestRef;
+        let ref = req.cookies ? req.cookies['io.prismic.preview'] : '';
+        if (!ref || ref.length <= 0) {
+          const latestRef = await this.getLatestRef();
+          if (latestRef !== null) {
+            ref = latestRef;
+          }
         }
+
+        PrismicService.latestSuccessfulRef = ref;
 
         return {
           headers: {

@@ -8,6 +8,7 @@ import { BlogPostResponse } from 'src/blog/blog.models';
 
 interface PostProps {
   post: BlogPostResponse;
+  isPreview: boolean;
 }
 
 export default class Post extends React.Component<PostProps> {
@@ -82,6 +83,13 @@ export default class Post extends React.Component<PostProps> {
         </div>
 
         <link rel="stylesheet" href="/public/css/prism.css" />
+
+        {this.props.isPreview ? (
+          <script
+            src="https://static.cdn.prismic.io/prismic.js?new=true&repo=marshalhayes"
+            defer
+          ></script>
+        ) : null}
       </BaseLayout>
     );
   }
