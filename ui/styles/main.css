@@ -40,6 +40,7 @@
     @apply block;
     @apply px-6 py-3;
     @apply my-3;
+    @apply whitespace-pre-wrap;
 
     background-color: #26292c;
     @apply dark:bg-gray-900;

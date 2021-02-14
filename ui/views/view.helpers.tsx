@@ -1,6 +1,7 @@
 import * as PrismicDOM from 'prismic-dom';
 import Prism from 'prismjs';
 import { createHash } from 'crypto';
+import { format } from 'prettier';
 
 /**
  * Dynamically render the Prismic body (slices)
@@ -17,23 +18,50 @@ export function renderFromBody(body: any[]) {
       }
 
       if (slice.type === 'code_snippet') {
-        const lang = 'html';
-        const grammar = Prism.languages[lang];
-        const snippet = PrismicDOM.RichText.asText(slice.primary.snippet);
+        const snippetLanguage = slice.primary.snippet_language;
+        const snippetText = PrismicDOM.RichText.asText(slice.primary.snippet);
 
-        // This may be overkill, but hash the snippet so we can use it as a unique ID
-        const snippetHash = createHash('sha256').update(snippet).digest('hex');
-
-        return `<div class="code-snippet relative">
-            <code class="lang-${lang}" id="snippet-${snippetHash}">
-              ${Prism.highlight(snippet, grammar, lang)}
-            </code>
-
-            <button class="absolute top-0 right-0 pr-6 pt-3 copy-snippet" data-target="#snippet-${snippetHash}">Copy</button>
-          </div>`;
+        return renderCodeSnippetFromText(snippetText, snippetLanguage)
+          .dangerouslySetInnerHTML.__html;
       }
     })
     .join('');
+
+  return {
+    dangerouslySetInnerHTML: {
+      __html: html,
+    },
+  };
+}
+
+export function renderCodeSnippetFromText(
+  snippetText: string,
+  snippetLanguage: string,
+) {
+  snippetLanguage = snippetLanguage.toLowerCase();
+
+  const grammar = Prism.languages[snippetLanguage];
+  if (!grammar) {
+    throw new Error(`Prism language "${snippetLanguage}" not found`);
+  }
+
+  // This may be overkill, but hash the snippet so we can use it as a unique ID
+  const snippetHash = createHash('sha256').update(snippetText).digest('hex');
+
+  const html = `
+    <div class="code-snippet relative">
+      <code class="lang-${snippetLanguage}" id="snippet-${snippetHash}">
+        [placeholder]
+      </code>
+
+      <button type="button" class="absolute top-0 right-0 mr-3 mt-3 copy-snippet" data-target="#snippet-${snippetHash}">Copy</button>
+    </div>
+  `
+    .replace(/\s\s+/g, '')
+    .replace(
+      '[placeholder]',
+      Prism.highlight(snippetText, grammar, snippetLanguage),
+    );
 
   return {
     dangerouslySetInnerHTML: {

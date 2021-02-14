@@ -76,6 +76,7 @@ export class BlogService {
                   type
                   primary {
                     snippet
+                    snippet_language
                   }
                 }
               }

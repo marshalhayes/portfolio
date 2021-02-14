@@ -31,18 +31,22 @@ export default class Home extends React.Component<BaseLayoutProps & HomeProps> {
             <div className="my-14">
               <div className="text-sm uppercase font-mono">Latest Posts</div>
 
-              <ol>
-                {this.props.latestPosts.map((post, i) => (
-                  <li
-                    key={i}
-                    {...(i < this.props.latestPosts.length - 1
-                      ? { className: 'mb-5' }
-                      : {})}
-                  >
-                    <PostPreview post={post}></PostPreview>
-                  </li>
-                ))}
-              </ol>
+              {this.props.latestPosts.length > 0 ? (
+                <ol>
+                  {this.props.latestPosts.map((post, i) => (
+                    <li
+                      key={i}
+                      {...(i < this.props.latestPosts.length - 1
+                        ? { className: 'mb-5' }
+                        : {})}
+                    >
+                      <PostPreview post={post}></PostPreview>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <p>I haven't made any posts yet :(</p>
+              )}
             </div>
 
             <div className="text-sm uppercase font-mono mb-2">
