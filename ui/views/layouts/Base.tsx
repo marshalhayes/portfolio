@@ -42,7 +42,7 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
           />
         </head>
 
-        <body className="bg-white dark:bg-black text-black dark:text-gray-100">
+        <body className="bg-gray-100 dark:bg-black text-black dark:text-gray-100">
           {this.props.children}
 
           {this.props.isPreview ? (

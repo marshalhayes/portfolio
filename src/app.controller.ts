@@ -11,7 +11,13 @@ export class AppController {
     const posts = await this.blogService.getPosts(3);
 
     return {
-      latestPosts: posts?.edges,
+      latestPosts: posts?.edges ?? [],
     };
+  }
+
+  @Get('about')
+  @Render('About')
+  about() {
+    return {};
   }
 }

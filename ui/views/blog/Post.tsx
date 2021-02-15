@@ -25,7 +25,7 @@ export default class Post extends React.Component<PostProps> {
       <BaseLayout {...this.props}>
         <div className="container mx-auto sm:px-3">
           <section className="flex flex-col lg:flex-row justify-between">
-            <main className="w-full px-3 my-4">
+            <main className="w-full px-3 mt-4">
               <a
                 href="/"
                 title="Return to blog"
@@ -36,7 +36,10 @@ export default class Post extends React.Component<PostProps> {
 
               <h1 className="mb-1">{this.title}</h1>
 
-              <div id="metadata" className="mb-5 text-gray-400">
+              <div
+                id="metadata"
+                className="mb-5 text-gray-600 dark:text-gray-400"
+              >
                 Posted{' '}
                 <Timestamp
                   dateTime={this.props.post._meta.firstPublicationDate}
@@ -47,7 +50,7 @@ export default class Post extends React.Component<PostProps> {
             </main>
 
             <aside className="px-3 lg:px-0 max-w-full lg:max-w-sm">
-              <div className="p-5 shadow-lg dark:text-white border-l-4 border-b-4 border-sizzling-red dark:bg-gray-900">
+              <div className="p-5 shadow-lg dark:text-white border lg:border-t-0 border-sizzling-red dark:bg-gray-900">
                 <div className="font-medium">
                   <h3 className="mb-3">About the Author</h3>
                 </div>

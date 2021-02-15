@@ -1,7 +1,6 @@
 import * as PrismicDOM from 'prismic-dom';
 import Prism from 'prismjs';
 import { createHash } from 'crypto';
-import { format } from 'prettier';
 
 /**
  * Dynamically render the Prismic body (slices)
@@ -9,11 +8,22 @@ import { format } from 'prettier';
  * @param body
  */
 export function renderFromBody(body: any[]) {
+  if (!body) {
+    return null;
+  }
+
   const html = body
     .map((slice) => {
       if (slice.type === 'text') {
-        return slice.fields
+        return (slice.fields ?? [slice.primary])
           .map((f) => PrismicDOM.RichText.asHtml(f.text))
+          .map((s) =>
+            // I sometimes use backticks to highlight simple snippets of code, usually just names of stuff
+            s.replace(
+              /\`([^`]+)\`/g,
+              '<code class="lang-markup inline p-1">$1</code>',
+            ),
+          )
           .join('');
       }
 

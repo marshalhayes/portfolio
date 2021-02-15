@@ -1,6 +1,7 @@
 import BaseLayout, { BaseLayoutProps } from './layouts/Base';
 import PostPreview from './blog/partials/PostPreview';
 import React from 'react';
+import SocialLinks from './partials/SocialLinks';
 
 interface HomeProps {
   latestPosts: any[];
@@ -21,15 +22,18 @@ export default class Home extends React.Component<BaseLayoutProps & HomeProps> {
           </div>
 
           <div className="lg:w-4/6 container mx-auto p-7 lg:p-14">
-            <h1 className="p-3 bg-black text-white lg:p-0 lg:bg-transparent">
+            <h1 className="p-3 bg-black text-white lg:p-0 lg:bg-transparent lg:text-current">
               Hi, I'm Marshal.
             </h1>
-            <p className="p-3 bg-black text-white lg:p-0 lg:bg-transparent">
+
+            <p className="p-3 bg-black text-white lg:p-0 lg:bg-transparent lg:text-current">
               I'm a full stack Software Engineer.
             </p>
 
             <div className="my-14">
-              <div className="text-sm uppercase font-mono">Latest Posts</div>
+              <div className="text-sm uppercase font-mono mb-2">
+                Latest Posts
+              </div>
 
               {this.props.latestPosts.length > 0 ? (
                 <ol>
@@ -53,19 +57,7 @@ export default class Home extends React.Component<BaseLayoutProps & HomeProps> {
               Find me on Social Media
             </div>
 
-            <ul>
-              <li className="inline-block mr-3">
-                <a href="https://github.com/marshalhayes">GitHub</a>
-              </li>
-
-              <li className="inline-block mr-3">
-                <a href="https://twitter.com/marshalhayes">Twitter</a>
-              </li>
-
-              <li className="inline-block">
-                <a href="https://linkedin.com/in/marshalhayes">LinkedIn</a>
-              </li>
-            </ul>
+            <SocialLinks></SocialLinks>
           </div>
         </main>
       </BaseLayout>
