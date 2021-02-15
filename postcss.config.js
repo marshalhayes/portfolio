@@ -11,8 +11,6 @@ const prodPlugins = {
 
 if (process.env.NODE_ENV === 'production') {
   Object.assign(plugins, { ...plugins, ...prodPlugins });
-
-  console.log(plugins);
 }
 
 module.exports = {
