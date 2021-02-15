@@ -26,22 +26,42 @@ function loadComments() {
 }
 
 const wrapper = document.getElementById('disqus-wrapper');
-const isInViewportNow =
-  0 < window.innerHeight &&
-  wrapper.getBoundingClientRect().top < window.innerHeight;
+if (window.matchMedia('(prefers-reduced-data: reduce)').matches) {
+  // The user prefers reduced data, show a button to show comments
+  const button = document.createElement('button');
 
-if (isInViewportNow || !IntersectionObserver) {
-  loadComments();
+  button.addEventListener('click', (e: Event) => {
+    e.preventDefault();
+
+    loadComments();
+    button.remove();
+  });
+
+  button.className = 'p-4 text-white bg-gray-900 block w-auto mx-auto';
+  button.innerText = 'Load Comments';
+
+  wrapper.insertAdjacentElement('beforeend', button);
 } else {
-  const observer = new IntersectionObserver(
-    (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
-      if (entries[0].intersectionRatio <= 0) return;
+  const isInViewportNow =
+    0 < window.innerHeight &&
+    wrapper.getBoundingClientRect().top < window.innerHeight;
 
-      loadComments();
+  if (isInViewportNow || !IntersectionObserver) {
+    loadComments();
+  } else {
+    const observer = new IntersectionObserver(
+      (
+        entries: IntersectionObserverEntry[],
+        observer: IntersectionObserver,
+      ) => {
+        if (entries[0].intersectionRatio <= 0) return;
 
-      observer.disconnect();
-    },
-  );
+        loadComments();
 
-  observer.observe(wrapper);
+        observer.disconnect();
+      },
+    );
+
+    observer.observe(wrapper);
+  }
 }

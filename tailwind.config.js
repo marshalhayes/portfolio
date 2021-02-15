@@ -1,5 +1,5 @@
 module.exports = {
-  purge: ['./ui/views/**/*.tsx'],
+  purge: ['./ui/views/**/*.tsx', './ui/js/**/*.ts'],
   darkMode: 'class',
   theme: {
     extend: {
