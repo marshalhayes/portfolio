@@ -7,6 +7,7 @@ export interface BlogPostResponse {
   _meta: BlogPostResponseMeta;
   comments_enabled: boolean | null; // TODO: Figure out why prismic returns null instead of the default (true)
   title: string;
+  preview_text: string;
   body: any; // TODO: How to type this?
 }
 
