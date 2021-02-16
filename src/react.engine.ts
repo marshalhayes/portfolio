@@ -33,15 +33,6 @@ export default async function reactExpressEngine(
       '<!DOCTYPE html>' +
       renderToStaticMarkup(createElement(reactComponent, options));
 
-    // It's hard to debug in dev tools when there's no whitespace, so add it back when not in prod lol
-    // if (process.env.NODE_ENV !== 'production') {
-    //   renderedMarkup = format(renderedMarkup, {
-    //     parser: 'html',
-    //     htmlWhitespaceSensitivity: 'css',
-    //     tabWidth: 2,
-    //   });
-    // }
-
     cb(null, renderedMarkup);
   } catch (e) {
     cb(e, null);
