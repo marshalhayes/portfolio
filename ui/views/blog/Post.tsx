@@ -23,7 +23,7 @@ export default class Post extends React.Component<PostProps> {
   render() {
     return (
       <BaseLayout {...this.props}>
-        <div className="container mx-auto sm:px-3">
+        <div className="container mx-auto sm:px-3 overflow-x-hidden">
           <section className="flex flex-col lg:flex-row justify-between">
             <main className="w-full px-3 mt-4">
               <a
