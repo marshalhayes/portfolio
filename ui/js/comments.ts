@@ -1,10 +1,12 @@
-function loadComments() {
-  const canonicalUrl =
-    document.querySelector('link[rel="canonical"]')?.getAttribute('href') ??
-    `${location.protocol}//${location.hostname}${
-      location.pathname === '/' ? '' : location.pathname
-    }`;
+const canonicalUrl =
+  document.querySelector('link[rel="canonical"]')?.getAttribute('href') ??
+  `${location.protocol}//${location.hostname}${
+    location.pathname === '/' ? '' : location.pathname
+  }`;
 
+const wrapper = document.getElementById('disqus-wrapper');
+
+function loadComments() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   // Ugh this stupid thing has to be global
@@ -25,7 +27,6 @@ function loadComments() {
   document.head.insertAdjacentElement('beforeend', script);
 }
 
-const wrapper = document.getElementById('disqus-wrapper');
 if (window.matchMedia('(prefers-reduced-data: reduce)').matches) {
   // The user prefers reduced data, show a button to show comments
   const button = document.createElement('button');
@@ -59,6 +60,9 @@ if (window.matchMedia('(prefers-reduced-data: reduce)').matches) {
         loadComments();
 
         observer.disconnect();
+      },
+      {
+        rootMargin: '650px',
       },
     );
 
