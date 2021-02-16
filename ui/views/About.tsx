@@ -15,11 +15,7 @@ export default class Home extends React.Component<
         <main className="container mx-auto px-3">
           <div className="flex flex-col md:flex-row">
             <div className="p-3">
-              <a
-                href="/"
-                title="Return to blog"
-                className="text-sizzling-red no-underline"
-              >
+              <a href="/" title="Return to blog" className="no-underline">
                 &lt; Go back
               </a>
 

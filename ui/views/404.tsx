@@ -4,8 +4,8 @@ import BaseLayout from './layouts/Base';
 export default function NotFound(props) {
   return (
     <BaseLayout {...props}>
-      <div className="container mx-auto px-3">
-        <a href="/" className="text-sizzling-red no-underline">
+      <div className="container mx-auto p-3">
+        <a href="/" className="no-underline">
           &lt; Go back
         </a>
 

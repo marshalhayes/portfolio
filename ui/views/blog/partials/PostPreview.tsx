@@ -19,7 +19,7 @@ export default class PostPreview extends React.Component<PostPreviewProps> {
     return (
       <>
         <h3 className="text-2xl">
-          <a href={this.url} className="text-sizzling-red">
+          <a href={this.url}>
             {PrismicDOM.RichText.asText(this.props.post.node.title)}
           </a>
         </h3>
