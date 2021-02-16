@@ -16,13 +16,15 @@ export function renderFromBody(body: any[]) {
     .map((slice) => {
       if (slice.type === 'text') {
         return (slice.fields ?? [slice.primary])
-          .map((f) => PrismicDOM.RichText.asHtml(f.text))
-          .map((s) =>
-            // I sometimes use backticks to highlight simple snippets of code, usually just names of stuff
-            s.replace(
-              /\`([^`]+)\`/g,
-              '<code class="lang-markup inline p-1">$1</code>',
-            ),
+          .map((f) =>
+            f.text
+              ? PrismicDOM.RichText.asHtml(f.text)
+                  // I sometimes use backticks to highlight simple snippets of code, usually just names of stuff
+                  .replace(
+                    /\`([^`]+)\`/g,
+                    '<code class="lang-markup inline p-1">$1</code>',
+                  )
+              : '',
           )
           .join('');
       }
@@ -71,7 +73,11 @@ export function renderCodeSnippetFromText(
     .replace(
       '[placeholder]',
       Prism.highlight(snippetText, grammar, snippetLanguage),
-    );
+    )
+
+    // I hate relying on white space, so replace it with html entities. Idk if this is weird or not...
+    .replace(/\n/g, '<br />')
+    .replace(/\s\s/g, '&nbsp;&nbsp;');
 
   return {
     dangerouslySetInnerHTML: {
