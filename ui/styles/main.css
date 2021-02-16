@@ -5,6 +5,7 @@
 @layer base {
   html {
     @apply min-h-full;
+    @apply overflow-x-hidden;
   }
 
   h1 {
@@ -30,18 +31,30 @@
   p {
     @apply mb-4;
   }
+
+  ul,
+  ol {
+    @apply list-disc;
+    @apply mb-3;
+    @apply ml-3;
+    @apply pl-3;
+  }
 }
 
 @layer components {
   code {
     @apply block;
     @apply px-6 py-3;
-    @apply my-3;
-    @apply whitespace-pre-wrap;
 
     color: #ccc;
     background-color: #26292c;
     @apply dark:bg-gray-900;
+  }
+
+  code:not(.inline) {
+    @apply whitespace-pre;
+    @apply overflow-x-auto;
+    @apply my-3;
   }
 
   .code-snippet .copy-snippet {
