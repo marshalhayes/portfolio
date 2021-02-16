@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function SocialLinks() {
   return (
-    <ul>
+    <ul className="list-none p-0 m-0">
       <li className="inline-block mr-3">
         <a href="https://github.com/marshalhayes">GitHub</a>
       </li>

@@ -36,7 +36,7 @@ export default class Home extends React.Component<BaseLayoutProps & HomeProps> {
               </div>
 
               {this.props.latestPosts.length > 0 ? (
-                <ol>
+                <ol className="list-none p-0 m-0">
                   {this.props.latestPosts.map((post, i) => (
                     <li
                       key={i}
