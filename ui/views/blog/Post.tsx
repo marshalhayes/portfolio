@@ -9,20 +9,31 @@ import { BlogPostResponse } from 'src/blog/blog.models';
 type PostProps = { post: BlogPostResponse } & BaseLayoutProps;
 
 export default class Post extends React.Component<PostProps> {
-  private readonly title: string;
-  private readonly renderComments: boolean;
+  private readonly title?: string;
+  private readonly description?: string;
+  private readonly renderComments: boolean = false;
 
   constructor(props) {
     super(props);
 
     this.title = PrismicDOM.RichText.asText(this.props.post.title);
+    this.description = this.props.post.preview_text
+      ? PrismicDOM.RichText.asText(this.props.post.preview_text)
+      : undefined;
+
     this.renderComments =
       props.post.comments_enabled === null || props.post.comments_enabled;
   }
 
   render() {
     return (
-      <BaseLayout {...this.props}>
+      <BaseLayout
+        {...{
+          ...this.props,
+          title: this.title,
+          description: this.description,
+        }}
+      >
         <div className="container mx-auto sm:px-3 overflow-x-hidden">
           <section className="flex flex-col lg:flex-row justify-between">
             <main className="w-full px-3 mt-4">
