@@ -37,10 +37,29 @@ const themeToggler = () => {
     });
 };
 
+const deprivitizeMyEmail = () => {
+  // I made zero effort to hide this, but please don't spam me
+  const email = atob('bWFyc2hhbGRoYXllc0BnbWFpbC5jb20=');
+
+  const handleEvent = (e: Event) => {
+    const target = e.target as HTMLElement;
+    if (!target.matches('.email-me')) {
+      return;
+    }
+
+    if (!target.getAttribute('href')) {
+      target.setAttribute('href', `mailto:${email}`);
+    }
+  };
+
+  document.documentElement.addEventListener('click', handleEvent);
+};
+
 // An array of initialization functions called on DOMContentLoaded
 const onDOMContentLoaded: ((e: Event) => void)[] = [
   detectAndSetPreferredTheme,
   themeToggler,
+  deprivitizeMyEmail,
 ];
 
 window.addEventListener(
