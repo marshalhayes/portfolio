@@ -64,6 +64,7 @@ export class BlogService {
                 firstPublicationDate
               }
               comments_enabled
+              preview_text
               title
               body {
                 ... on PostBodyText {
