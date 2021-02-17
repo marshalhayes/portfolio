@@ -8,6 +8,17 @@ export type BaseLayoutProps = {
 };
 
 export default class BaseLayout extends React.Component<BaseLayoutProps> {
+  private readonly title: string;
+
+  constructor(props) {
+    super(props);
+
+    this.title =
+      this.props.title?.length > 0
+        ? `${this.props.title} // Marshal Hayes`
+        : 'Marshal Hayes';
+  }
+
   render() {
     return (
       <html className="dark" dir="ltr" lang="en">
@@ -19,14 +30,14 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
           <meta httpEquiv="Content-Type" content="text/html;charset=UTF-8" />
 
           {this.props.description?.length > 0 ? (
-            <meta name="description" content={this.props.description} />
+            <>
+              <meta name="description" content={this.props.description} />
+              <meta name="og:description" content={this.props.description} />
+            </>
           ) : null}
 
-          <title>
-            {this.props.title?.length > 0
-              ? `${this.props.title} | Marshal Hayes`
-              : 'Marshal Hayes'}
-          </title>
+          <meta name="og:title" content={this.title} />
+          <title>{this.title}</title>
 
           {this.props.canonicalUrl?.length > 0 ? (
             <link rel="canonical" href={this.props.canonicalUrl} />
