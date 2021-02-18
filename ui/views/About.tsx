@@ -11,7 +11,7 @@ export default class Home extends React.Component<
 > {
   render() {
     return (
-      <BaseLayout {...this.props}>
+      <BaseLayout {...{ ...this.props, title: 'About Me' }}>
         <main className="container mx-auto px-3">
           <div className="flex flex-col md:flex-row">
             <div className="p-3">
