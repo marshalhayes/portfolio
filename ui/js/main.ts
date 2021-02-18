@@ -47,8 +47,16 @@ const deprivitizeMyEmail = () => {
       return;
     }
 
-    if (!target.getAttribute('href')) {
-      target.setAttribute('href', `mailto:${email}`);
+    const href = target.getAttribute('href');
+
+    if (!href || href === '#') {
+      e.preventDefault();
+
+      const a = document.createElement('a');
+
+      a.href = `mailto:${email}`;
+      a.click();
+      a.remove();
     }
   };
 
