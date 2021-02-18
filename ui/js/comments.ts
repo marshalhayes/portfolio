@@ -1,5 +1,5 @@
 const canonicalUrl =
-  document.querySelector('link[rel="canonical"]')?.getAttribute('href') ??
+  document.head.querySelector('link[rel="canonical"]')?.getAttribute('href') ??
   `${location.protocol}//${location.hostname}${
     location.pathname === '/' ? '' : location.pathname
   }`;
