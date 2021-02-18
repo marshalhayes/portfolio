@@ -27,7 +27,14 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
             name="viewport"
             content="width=device-width, initial-scale=1.0"
           />
+
           <meta httpEquiv="Content-Type" content="text/html;charset=UTF-8" />
+
+          <title>{this.title}</title>
+
+          {this.props.title ? (
+            <meta name="og:title" content={this.props.title} />
+          ) : null}
 
           {this.props.description?.length > 0 ? (
             <>
@@ -36,11 +43,11 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
             </>
           ) : null}
 
-          <meta name="og:title" content={this.title} />
-          <title>{this.title}</title>
-
           {this.props.canonicalUrl?.length > 0 ? (
-            <link rel="canonical" href={this.props.canonicalUrl} />
+            <>
+              <meta name="og:url" content={this.props.canonicalUrl} />
+              <link rel="canonical" href={this.props.canonicalUrl} />
+            </>
           ) : null}
 
           <link rel="preload" as="style" href="/public/css/main.bundle.css" />
