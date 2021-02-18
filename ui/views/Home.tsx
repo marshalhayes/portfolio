@@ -14,7 +14,7 @@ export default class Home extends React.Component<BaseLayoutProps & HomeProps> {
         <main className="min-h-screen flex flex-col lg:flex-row">
           <div className="min-h-screen -mb-48 lg:mb-0 lg:w-2/6 dark:text-white dark:bg-gray-900">
             <div
-              className="bg-cover bg-fixed bg-no-repeat w-full lg:bg-local h-screen"
+              className="bg-cover bg-no-repeat bg-local w-full h-screen"
               style={{
                 backgroundImage: 'url("/public/images/me-in-new-york.jpg")',
               }}
