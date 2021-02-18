@@ -54,7 +54,6 @@
   }
 
   code:not(.inline) {
-    @apply whitespace-pre;
     @apply overflow-x-auto;
     @apply my-3;
   }

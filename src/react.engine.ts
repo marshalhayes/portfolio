@@ -1,6 +1,7 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import babelRegister from '@babel/register';
+import { format } from 'prettier';
 
 export default async function reactExpressEngine(
   path: string,
@@ -29,9 +30,15 @@ export default async function reactExpressEngine(
 
     // Dynamically import the view and render it as HTML markup
     const reactComponent = (await import(path)).default as React.ComponentClass;
-    const renderedMarkup =
+    let renderedMarkup =
       '<!DOCTYPE html>' +
       renderToStaticMarkup(createElement(reactComponent, options));
+
+    if (process.env.NODE_ENV !== 'production') {
+      renderedMarkup = format(renderedMarkup, {
+        parser: 'html',
+      });
+    }
 
     cb(null, renderedMarkup);
   } catch (e) {
