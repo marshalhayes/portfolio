@@ -7,10 +7,11 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { AppController } from './app.controller';
-import { AppMiddleware } from './app.middleware';
+import { CanonicalUrlMiddleware } from './middleware/canonical.middleware';
 import { BlogModule } from './blog/blog.module';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { PrismicModule } from './prismic/prismic.module';
+import { TrackingMiddleware } from './middleware/tracking.middleware';
 
 @Module({
   imports: [ConfigModule.forRoot(), PrismicModule, BlogModule],
@@ -24,7 +25,7 @@ import { PrismicModule } from './prismic/prismic.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AppMiddleware).forRoutes({
+    consumer.apply(CanonicalUrlMiddleware, TrackingMiddleware).forRoutes({
       method: RequestMethod.GET,
       path: '*',
     });
