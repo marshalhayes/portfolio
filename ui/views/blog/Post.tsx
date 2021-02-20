@@ -89,7 +89,7 @@ export default class Post extends React.Component<PostProps> {
           ) : null}
         </div>
 
-        <link rel="stylesheet" href="/public/css/prism.css" />
+        <link rel="stylesheet" href="/public/css/vendor/prism.css" />
 
         {this.props.isPreview ? (
           <script
