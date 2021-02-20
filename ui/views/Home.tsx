@@ -16,7 +16,7 @@ export default class Home extends React.Component<BaseLayoutProps & HomeProps> {
             <div
               className="bg-cover bg-no-repeat bg-local w-full h-screen"
               style={{
-                backgroundImage: 'url("/public/images/me-in-new-york.jpg")',
+                backgroundImage: 'url("/public/images/me-in-memphis.jpg")',
               }}
             ></div>
           </div>
