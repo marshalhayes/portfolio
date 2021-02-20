@@ -34,6 +34,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       __dirname,
       `../../../ui/views/${status}.tsx`,
     );
+
     if (!existsSync(pathToExceptionPage)) {
       return res.sendStatus(status);
     }

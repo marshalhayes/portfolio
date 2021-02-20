@@ -1,10 +1,13 @@
 import './utils/snippets';
 
-const setTheme = (theme: 'light' | 'dark', save = false) => {
+const setTheme = (
+  theme: 'light' | 'dark',
+  options: { save?: boolean } = { save: false },
+) => {
   document.documentElement.classList.remove('light', 'dark');
   document.documentElement.classList.add(theme);
 
-  if (save) {
+  if (options.save) {
     localStorage.setItem('preferredTheme', theme);
   }
 };
@@ -33,7 +36,9 @@ const themeToggler = () => {
       const currentTheme = getTheme();
       const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
-      setTheme(newTheme, true);
+      setTheme(newTheme, {
+        save: true,
+      });
     });
 };
 

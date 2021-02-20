@@ -96,7 +96,7 @@ export default class Home extends React.Component<
           </div>
 
           <div className="p-3">
-            <div className="flex flex-col lg:flex-row lg:space-x-3">
+            <div className="flex flex-col lg:flex-row lg:space-x-10">
               <div className="lg:w-1/2 mb-3">
                 <div className="text-sm uppercase font-mono mb-2">
                   Reach out

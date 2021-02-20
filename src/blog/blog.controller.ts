@@ -13,7 +13,7 @@ export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
   @Get(':uid')
-  @Render('blog/post')
+  @Render('blog/Post')
   async getPost(@Param('uid') uid: string) {
     const post = await this.blogService.getPostByUid(uid);
     if (post === null) {
