@@ -18,11 +18,19 @@ document.documentElement.addEventListener(
       const originalText = target.innerText;
 
       copyText(snippetText)
-        .then(() => (target.innerText = 'Copied!'))
+        .then(() => {
+          target.innerText = 'Copied!';
+          target.style.display = 'block';
+          target.style.opacity = '1';
+          target.style.visibility = 'visible';
+        })
         .finally(() => {
           setTimeout(() => {
             target.innerText = originalText;
-          }, 350);
+            target.style.display = '';
+            target.style.opacity = '';
+            target.style.visibility = '';
+          }, 750);
         });
     }
   },
