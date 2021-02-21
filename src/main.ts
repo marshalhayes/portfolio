@@ -52,6 +52,9 @@ async function bootstrap() {
           ],
         },
       },
+      referrerPolicy: {
+        policy: 'no-referrer-when-downgrade',
+      },
     }),
   );
 
