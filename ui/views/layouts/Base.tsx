@@ -9,6 +9,7 @@ export type BaseLayoutProps = {
 
 export default class BaseLayout extends React.Component<BaseLayoutProps> {
   private readonly title: string;
+  private readonly description: string;
 
   constructor(props) {
     super(props);
@@ -17,6 +18,12 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
       this.props.title?.length > 0
         ? `${this.props.title} // Marshal Hayes`
         : 'Marshal Hayes';
+
+    this.description =
+      'Marshal Hayes is a Software Engineer who is passionate about building efficient, user friendly, environmentally friendly web apps.';
+    if (this.props.description?.length > 0) {
+      this.description = this.props.description;
+    }
   }
 
   render() {
@@ -36,12 +43,8 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
             <meta name="og:title" content={this.props.title} />
           ) : null}
 
-          {this.props.description?.length > 0 ? (
-            <>
-              <meta name="description" content={this.props.description} />
-              <meta name="og:description" content={this.props.description} />
-            </>
-          ) : null}
+          <meta name="description" content={this.description} />
+          <meta name="og:description" content={this.description} />
 
           {this.props.canonicalUrl?.length > 0 ? (
             <>
