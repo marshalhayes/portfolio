@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import reactExpressEngine from './react.engine';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
+import * as helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -18,6 +19,41 @@ async function bootstrap() {
 
   const viewPath = join(currentDir, '../../ui/', 'views');
   const assetsPath = join(currentDir, '../../', 'public');
+
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: [
+            "'self'",
+            'https://disqus.com',
+            'https://*.disqus.com',
+            'https://*.disquscdn.com',
+            'https://disquscdn.com',
+          ],
+          imgSrc: [
+            "'self'",
+            'https://prismic.io',
+            'https://*.prismic.io',
+            'https://disqus.com',
+            'https://*.disqus.com',
+            'https://*.disquscdn.com',
+            'https://disquscdn.com',
+            "'unsafe-inline'",
+            'data:',
+          ],
+          styleSrc: [
+            "'self'",
+            'https://disqus.com',
+            'https://*.disqus.com',
+            'https://*.disquscdn.com',
+            'https://disquscdn.com',
+            "'unsafe-inline'",
+          ],
+        },
+      },
+    }),
+  );
 
   app.setBaseViewsDir(viewPath);
   app.useStaticAssets(assetsPath, {
@@ -36,4 +72,5 @@ async function bootstrap() {
 
   await app.listen(port || 8000);
 }
+
 bootstrap();
