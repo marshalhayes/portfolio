@@ -8,6 +8,13 @@ import { BlogPostResponse } from 'src/blog/blog.models';
 
 type PostProps = { post: BlogPostResponse } & BaseLayoutProps;
 
+const getEstimatedReadTime = (
+  htmlString: string,
+  options = { averageWPM: 200 },
+) =>
+  htmlString.replace(/<code[^>]>.*<\/code>/g, '').split(' ').length /
+  options.averageWPM;
+
 export default class Post extends React.Component<PostProps> {
   private readonly title?: string;
   private readonly description?: string;
@@ -26,6 +33,11 @@ export default class Post extends React.Component<PostProps> {
   }
 
   render() {
+    const contentProps = renderFromBody(this.props.post.body);
+    const estimatedReadTime = Math.ceil(
+      getEstimatedReadTime(contentProps.dangerouslySetInnerHTML.__html),
+    );
+
     return (
       <BaseLayout
         {...{
@@ -47,13 +59,19 @@ export default class Post extends React.Component<PostProps> {
                 id="metadata"
                 className="mb-5 text-gray-600 dark:text-gray-400"
               >
-                Posted{' '}
-                <Timestamp
-                  dateTime={this.props.post._meta.firstPublicationDate}
-                ></Timestamp>
+                <div id="posted-date">
+                  Posted{' '}
+                  <Timestamp
+                    dateTime={this.props.post._meta.firstPublicationDate}
+                  ></Timestamp>
+                </div>
+
+                <div id="read-time">
+                  About a {estimatedReadTime} minute read
+                </div>
               </div>
 
-              <div id="content" {...renderFromBody(this.props.post.body)}></div>
+              <div id="content" {...contentProps}></div>
             </main>
 
             <aside className="px-3 lg:px-0 max-w-full lg:max-w-sm">
