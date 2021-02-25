@@ -28,7 +28,7 @@ export class PrismicService {
 
   constructor(
     private readonly http: HttpService,
-    @Inject(REQUEST) private readonly req: Request,
+    @Inject(REQUEST) readonly req: Request,
     config: ConfigService,
   ) {
     this.config = config.get<PrismicConfig>('prismic');
