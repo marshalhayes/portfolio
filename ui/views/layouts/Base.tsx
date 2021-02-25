@@ -46,6 +46,9 @@ export default class BaseLayout extends React.Component<BaseLayoutProps> {
           <meta name="description" content={this.description} />
           <meta name="og:description" content={this.description} />
 
+          <meta name="twitter:card" content="summary"></meta>
+          <meta name="twitter:creator" content="@marshalhayes"></meta>
+
           {this.props.canonicalUrl?.length > 0 ? (
             <>
               <meta name="og:url" content={this.props.canonicalUrl} />
