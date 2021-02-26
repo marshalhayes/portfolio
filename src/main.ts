@@ -6,8 +6,13 @@ import reactExpressEngine from './react.engine';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import * as helmet from 'helmet';
+import { config } from 'dotenv';
 
 async function bootstrap() {
+  config({
+    path: '../../.env',
+  });
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // Disable stuff I don't need
