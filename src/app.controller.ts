@@ -1,7 +1,14 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import {
+  CacheInterceptor,
+  Controller,
+  Get,
+  Render,
+  UseInterceptors,
+} from '@nestjs/common';
 import { BlogService } from './blog/blog.service';
 
 @Controller()
+@UseInterceptors(CacheInterceptor)
 export class AppController {
   constructor(private readonly blogService: BlogService) {}
 

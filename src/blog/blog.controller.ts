@@ -1,14 +1,17 @@
 import {
+  CacheInterceptor,
   Controller,
   Get,
   HttpException,
   HttpStatus,
   Param,
   Render,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 
 @Controller('blog')
+@UseInterceptors(CacheInterceptor)
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 

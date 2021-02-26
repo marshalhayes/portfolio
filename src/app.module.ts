@@ -1,4 +1,5 @@
 import {
+  CacheModule,
   MiddlewareConsumer,
   Module,
   NestModule,
@@ -14,7 +15,15 @@ import { PrismicModule } from './prismic/prismic.module';
 import { TrackingMiddleware } from './middleware/tracking.middleware';
 
 @Module({
-  imports: [ConfigModule.forRoot(), PrismicModule, BlogModule],
+  imports: [
+    ConfigModule.forRoot(),
+    PrismicModule,
+    BlogModule,
+    CacheModule.register({
+      ttl: process.env.NODE_ENV === 'production' ? 60 * 60 : 0,
+      max: 25,
+    }),
+  ],
   controllers: [AppController],
   providers: [
     {
