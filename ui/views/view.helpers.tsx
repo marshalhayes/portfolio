@@ -8,7 +8,7 @@ import { createHash } from 'crypto';
  * @param body
  */
 export function renderFromBody(body: any[]) {
-  if (!body) {
+  if (!body || body.length <= 0) {
     return null;
   }
 
@@ -58,7 +58,7 @@ export function renderCodeSnippetFromText(
   }
 
   // This may be overkill, but hash the snippet so we can use it as a unique ID
-  const snippetHash = createHash('sha256').update(snippetText).digest('hex');
+  const snippetHash = createHash('sha1').update(snippetText).digest('hex');
 
   const html = `
     <div class="code-snippet relative">
