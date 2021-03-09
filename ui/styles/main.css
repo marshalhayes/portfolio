@@ -70,4 +70,9 @@
     visibility: visible;
     opacity: 1;
   }
+
+  /* I'm literally so disgusted. IntersectionObserver, you suck. */
+  #disqus-wrapper {
+    min-height: 1px;
+  }
 }
