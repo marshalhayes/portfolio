@@ -1,7 +1,3 @@
-export function copyText(text: string) {
-  return navigator.clipboard.writeText(text);
-}
-
 document.documentElement.addEventListener(
   'click',
   function copySnippet(e: Event) {
@@ -17,7 +13,8 @@ document.documentElement.addEventListener(
     if (snippetText.length > 0) {
       const originalText = target.innerText;
 
-      copyText(snippetText)
+      navigator.clipboard
+        .writeText(snippetText)
         .then(() => {
           target.innerText = 'Copied!';
           target.style.display = 'block';
