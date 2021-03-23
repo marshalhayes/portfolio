@@ -1,20 +1,26 @@
-import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { RequestLogService } from '../logging/request-log.service';
 
 @Injectable()
 export class TrackingMiddleware implements NestMiddleware {
-  // TODO: Replace this with persistent storage
-  private static readonly logger = new Logger(TrackingMiddleware.name);
-  private static isDebug = process.env.NODE_ENV !== 'production';
+  // Ignore patterns for user agents I don't care about
+  private static readonly userAgentsToIgnore = [/^\bkube-probe\b/i];
 
   constructor(private readonly requestLogService: RequestLogService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
+    const userAgent = req.headers['user-agent'];
+    if (
+      TrackingMiddleware.userAgentsToIgnore.filter((r) => userAgent.match(r))
+        .length > 0
+    ) {
+      return next();
+    }
+
     const url = req.originalUrl;
     const requestTimeApproximation = new Date(Date.now());
     const dnt = req.headers['dnt']?.toString() ?? '0';
-    const userAgent = req.headers['user-agent'];
     const referrer = req.headers['referer'];
 
     let ip = req.ip;
