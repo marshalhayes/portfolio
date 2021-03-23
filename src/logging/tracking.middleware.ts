@@ -1,15 +1,19 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
+import { RequestLogService } from '../logging/request-log.service';
 
 @Injectable()
 export class TrackingMiddleware implements NestMiddleware {
   // TODO: Replace this with persistent storage
   private static readonly logger = new Logger(TrackingMiddleware.name);
+  private static isDebug = process.env.NODE_ENV !== 'production';
+
+  constructor(private readonly requestLogService: RequestLogService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
     const url = req.originalUrl;
-    const requestTimeApproximation = Date.now();
-    const dnt = req.headers['dnt'];
+    const requestTimeApproximation = new Date(Date.now());
+    const dnt = req.headers['dnt']?.toString() ?? '0';
     const userAgent = req.headers['user-agent'];
     const referrer = req.headers['referer'];
 
@@ -29,23 +33,24 @@ export class TrackingMiddleware implements NestMiddleware {
     }
 
     res.on('finish', () => {
-      const contentLength = res.getHeader('content-length');
+      const contentLength = res.getHeader('content-length').toString();
       const statusCode = res.statusCode;
       const statusMessage = res.statusMessage;
-      const responseTimeApproximation = Date.now();
+      const responseTimeApproximation = new Date(Date.now());
 
       // TODO: Anonymize or disable this if requested (DNT/cookie pref?)
-      TrackingMiddleware.logger.log({
-        url,
+      // Write to the database
+      this.requestLogService.requestLogRepository.insert({
+        requestUrl: url,
         userAgent,
         ip,
-        statusCode: statusCode.toString(),
+        statusCode,
         statusMessage,
         referrer,
-        contentLength,
         dnt,
-        requestTimeApproximation: requestTimeApproximation.toString(),
-        responseTimeApproximation: responseTimeApproximation.toString(),
+        contentLength: parseInt(contentLength, 10),
+        requestTime: requestTimeApproximation,
+        responseTime: responseTimeApproximation,
       });
     });
 
