@@ -29,7 +29,7 @@ export class RequestLog {
   contentLength: number;
 
   @Column()
-  dnt: string;
+  dnt: boolean;
 
   @Column({ name: 'request_time', type: 'timestamp' })
   requestTime: Date;

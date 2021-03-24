@@ -20,7 +20,7 @@ export class TrackingMiddleware implements NestMiddleware {
 
     const url = req.originalUrl;
     const requestTimeApproximation = new Date(Date.now());
-    const dnt = req.headers['dnt']?.toString() ?? '0';
+    const dnt = req.headers['dnt']?.toString() === '1';
     const referrer = req.headers['referer'];
 
     let ip = req.ip;
@@ -38,14 +38,15 @@ export class TrackingMiddleware implements NestMiddleware {
       }
     }
 
-    res.on('finish', () => {
-      const contentLength = res.getHeader('content-length').toString();
-      const statusCode = res.statusCode;
-      const statusMessage = res.statusMessage;
-      const responseTimeApproximation = new Date(Date.now());
+    next();
 
-      // TODO: Anonymize or disable this if requested (DNT/cookie pref?)
-      // Write to the database
+    const contentLength = res.getHeader('content-length').toString();
+    const statusCode = res.statusCode;
+    const statusMessage = res.statusMessage;
+    const responseTimeApproximation = new Date(Date.now());
+
+    // Write to the database
+    if (process.env.NODE_ENV === 'production' && !dnt) {
       this.requestLogService.requestLogRepository.insert({
         requestUrl: url,
         userAgent,
@@ -58,8 +59,6 @@ export class TrackingMiddleware implements NestMiddleware {
         requestTime: requestTimeApproximation,
         responseTime: responseTimeApproximation,
       });
-    });
-
-    next();
+    }
   }
 }
