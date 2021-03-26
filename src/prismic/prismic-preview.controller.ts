@@ -9,7 +9,8 @@ import {
 import { Response } from 'express';
 import { PrismicService } from './prismic.service';
 import gql from 'graphql-tag';
-import linkResolver from 'src/link.resolver';
+import linkResolver from '../link.resolver';
+import { isProd } from '../main';
 
 @Controller('preview')
 export class PrismicPreviewController {
@@ -49,11 +50,10 @@ export class PrismicPreviewController {
 
     if (result?.data?._allDocuments?.edges?.length > 0) {
       const url = linkResolver(result.data._allDocuments.edges[0].node);
-      const inProd = process.env.NODE_ENV === 'production';
 
       res.cookie('io.prismic.preview', token, {
-        sameSite: inProd ? 'strict' : 'none',
-        secure: inProd,
+        sameSite: isProd ? 'strict' : 'none',
+        secure: isProd,
         httpOnly: false,
       });
 

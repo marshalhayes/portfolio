@@ -15,6 +15,7 @@ import { PrismicModule } from './prismic/prismic.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RequestLog } from './logging/request-log.entity';
 import { RequestLogModule } from './logging/request-log.module';
+import { isProd } from './main';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { RequestLogModule } from './logging/request-log.module';
     PrismicModule,
     BlogModule,
     CacheModule.register({
-      ttl: process.env.NODE_ENV === 'production' ? 60 * 60 : 0,
+      ttl: isProd ? 60 * 60 : 0,
       max: 25,
     }),
 

@@ -1,4 +1,5 @@
 import { CacheModule, Module } from '@nestjs/common';
+import { isProd } from '../main';
 import { PrismicModule } from 'src/prismic/prismic.module';
 import { BlogController } from './blog.controller';
 import { BlogService } from './blog.service';
@@ -7,7 +8,7 @@ import { BlogService } from './blog.service';
   imports: [
     PrismicModule,
     CacheModule.register({
-      ttl: process.env.NODE_ENV === 'production' ? 60 * 60 : 0,
+      ttl: isProd ? 60 * 60 : 0,
       max: 25,
     }),
   ],

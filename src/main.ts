@@ -7,6 +7,9 @@ import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import * as helmet from 'helmet';
 
+export const isProd = process.env.NODE_ENV === 'production';
+export const isDev = !isProd;
+
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 

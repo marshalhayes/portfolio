@@ -1,5 +1,6 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
+import { isProd } from '../main';
 import { RequestLogService } from '../logging/request-log.service';
 
 @Injectable()
@@ -51,7 +52,7 @@ export class TrackingMiddleware implements NestMiddleware {
     };
 
     // Write to the database
-    if (process.env.NODE_ENV === 'production') {
+    if (isProd) {
       this.requestLogService.requestLogRepository.insert(requestLogRecord);
     } else {
       this.logger.log(requestLogRecord);
