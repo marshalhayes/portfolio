@@ -34,7 +34,7 @@ export class TrackingMiddleware implements NestMiddleware {
 
     next();
 
-    const contentLength = res.getHeader('content-length').toString();
+    const contentLength = res.getHeader('content-length')?.toString() || '0';
     const statusCode = res.statusCode;
     const statusMessage = res.statusMessage;
     const responseTimeApproximation = new Date(Date.now());
