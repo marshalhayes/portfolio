@@ -13,7 +13,7 @@ export class TrackingMiddleware implements NestMiddleware {
   constructor(private readonly requestLogService: RequestLogService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
-    const userAgent = req.headers['user-agent'];
+    const userAgent = req.headers['user-agent']?.toString() || '';
     const dnt = req.headers['dnt']?.toString() === '1';
 
     if (
@@ -29,7 +29,7 @@ export class TrackingMiddleware implements NestMiddleware {
     const referrer = req.headers['referer'];
 
     const ip =
-      req.headers[process.env.CLOUD_PROVIDER_REAL_IP_HEADER_NAME].toString() ||
+      req.headers[process.env.CLOUD_PROVIDER_REAL_IP_HEADER_NAME]?.toString() ||
       req.ip;
 
     next();
