@@ -12,10 +12,6 @@ const setTheme = (
   }
 };
 
-const getTheme = () => {
-  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-};
-
 const detectAndSetPreferredTheme = () => {
   let theme = localStorage.getItem('preferredTheme') as 'light' | 'dark';
   if (!theme) {
@@ -25,21 +21,6 @@ const detectAndSetPreferredTheme = () => {
   }
 
   setTheme(theme);
-};
-
-const themeToggler = () => {
-  document
-    .querySelector('.theme-toggler')
-    ?.addEventListener('click', (e: Event) => {
-      e.preventDefault();
-
-      const currentTheme = getTheme();
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-
-      setTheme(newTheme, {
-        save: true,
-      });
-    });
 };
 
 const deprivitizeMyEmail = () => {
@@ -71,7 +52,6 @@ const deprivitizeMyEmail = () => {
 // An array of initialization functions called on DOMContentLoaded
 const onDOMContentLoaded: ((e: Event) => void)[] = [
   detectAndSetPreferredTheme,
-  themeToggler,
   deprivitizeMyEmail,
 ];
 
