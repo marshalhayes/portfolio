@@ -1,5 +1,4 @@
 import {
-  CacheModule,
   MiddlewareConsumer,
   Module,
   NestModule,
@@ -15,17 +14,12 @@ import { PrismicModule } from './prismic/prismic.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RequestLog } from './logging/request-log.entity';
 import { RequestLogModule } from './logging/request-log.module';
-import { isProd } from './main';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     PrismicModule,
     BlogModule,
-    CacheModule.register({
-      ttl: isProd ? 60 * 60 : 0,
-      max: 25,
-    }),
 
     TypeOrmModule.forRoot({
       type: 'postgres',

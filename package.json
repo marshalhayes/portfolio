@@ -6,7 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "rimraf dist && yarn run build:client",
+    "clean": "rimraf dist",
+    "prebuild": "yarn run clean && yarn run build:client",
     "build:client": "run-p build:client:*",
     "build:client:js": "rollup -c rollup.config.js",
     "build:client:css": "postcss ui/styles/main.css -o public/css/main.bundle.css",
@@ -30,7 +31,6 @@
     "@nestjs/core": "^7.5.1",
     "@nestjs/platform-express": "^7.5.1",
     "@nestjs/typeorm": "^7.1.5",
-    "cache-manager": "^3.4.0",
     "cookie-parser": "^1.4.5",
     "graphql": "^15.5.0",
     "helmet": "^4.4.1",
