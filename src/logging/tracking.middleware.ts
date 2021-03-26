@@ -1,4 +1,4 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { RequestLogService } from '../logging/request-log.service';
 
@@ -7,11 +7,16 @@ export class TrackingMiddleware implements NestMiddleware {
   // Ignore patterns for user agents I don't care about
   private static readonly userAgentsToIgnore = [/^\bkube-probe\b/i];
 
+  private readonly logger = new Logger(TrackingMiddleware.name, true);
+
   constructor(private readonly requestLogService: RequestLogService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
     const userAgent = req.headers['user-agent'];
+    const dnt = req.headers['dnt']?.toString() === '1';
+
     if (
+      dnt ||
       TrackingMiddleware.userAgentsToIgnore.filter((r) => userAgent.match(r))
         .length > 0
     ) {
@@ -20,23 +25,11 @@ export class TrackingMiddleware implements NestMiddleware {
 
     const url = req.originalUrl;
     const requestTimeApproximation = new Date(Date.now());
-    const dnt = req.headers['dnt']?.toString() === '1';
     const referrer = req.headers['referer'];
 
-    let ip = req.ip;
-
-    // Try to get ipv4 address from ip. It's in the form ipv6:ipv4.
-    const i = ip.lastIndexOf(':');
-    if (i > 0) {
-      const p1 = ip.substring(0, i);
-      const p2 = ip.substring(i + 1);
-
-      if (p2 === undefined) {
-        ip = p1;
-      } else {
-        ip = p2;
-      }
-    }
+    const ip =
+      req.headers[process.env.CLOUD_PROVIDER_REAL_IP_HEADER_NAME].toString() ||
+      req.ip;
 
     next();
 
@@ -45,20 +38,23 @@ export class TrackingMiddleware implements NestMiddleware {
     const statusMessage = res.statusMessage;
     const responseTimeApproximation = new Date(Date.now());
 
+    const requestLogRecord = {
+      requestUrl: url,
+      userAgent,
+      ip,
+      statusCode,
+      statusMessage,
+      referrer,
+      contentLength: parseInt(contentLength, 10),
+      requestTime: requestTimeApproximation,
+      responseTime: responseTimeApproximation,
+    };
+
     // Write to the database
-    if (process.env.NODE_ENV === 'production' && !dnt) {
-      this.requestLogService.requestLogRepository.insert({
-        requestUrl: url,
-        userAgent,
-        ip,
-        statusCode,
-        statusMessage,
-        referrer,
-        dnt,
-        contentLength: parseInt(contentLength, 10),
-        requestTime: requestTimeApproximation,
-        responseTime: responseTimeApproximation,
-      });
+    if (process.env.NODE_ENV === 'production') {
+      this.requestLogService.requestLogRepository.insert(requestLogRecord);
+    } else {
+      this.logger.log(requestLogRecord);
     }
   }
 }
