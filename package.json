@@ -33,7 +33,7 @@
     "@nestjs/typeorm": "^7.1.5",
     "cookie-parser": "^1.4.5",
     "graphql": "^15.5.0",
-    "helmet": "^4.4.1",
+    "helmet": "^4.5.0",
     "pg": "^8.5.1",
     "prismic-dom": "^2.2.5",
     "prismjs": "^1.23.0",
