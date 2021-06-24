@@ -1,17 +1,11 @@
 module.exports = {
-  purge: ['./ui/views/**/*.tsx', './ui/js/**/*.ts'],
-  darkMode: 'class',
+  purge: ['./src/**/*.{tsx,css}'],
+  darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {
-      colors: {
-        'tiffany-blue': '#07beb8',
-        charcoal: '#2f4858',
-        'sizzling-red': '#f05d5e',
-      },
-    },
+    extend: {},
   },
   variants: {
     extend: {},
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [],
 };
