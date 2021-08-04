@@ -11,29 +11,9 @@ import { CanonicalUrlMiddleware } from './middleware/canonical.middleware';
 import { BlogModule } from './blog/blog.module';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { PrismicModule } from './prismic/prismic.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { RequestLog } from './logging/request-log.entity';
-import { RequestLogModule } from './logging/request-log.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    PrismicModule,
-    BlogModule,
-
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.POSTGRES_DB_HOST,
-      port: parseInt(process.env.POSTGRES_DB_PORT, 10),
-      username: process.env.POSTGRES_DB_USER,
-      password: process.env.POSTGRES_DB_PASSWORD,
-      database: 'marshalhayes_dev',
-      entities: [RequestLog],
-      synchronize: false,
-    }),
-
-    RequestLogModule,
-  ],
+  imports: [ConfigModule.forRoot(), PrismicModule, BlogModule],
   controllers: [AppController],
   providers: [
     {
