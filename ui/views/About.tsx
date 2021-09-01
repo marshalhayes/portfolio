@@ -81,8 +81,7 @@ export default class Home extends React.Component<
 
               <p>
                 Outside of programming, you can usually find me hanging with
-                friends, at a bar or coffee shop, playing chess, or shopping
-                with my girlfriend.
+                friends, at a bar or coffee shop, playing chess, or spending time with my family.
               </p>
             </div>
 
