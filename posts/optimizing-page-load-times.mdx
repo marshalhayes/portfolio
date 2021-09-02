@@ -1,0 +1,220 @@
+---
+title: Optimizing page load times (the hard way)
+description: >-
+  Fast load times are extremely important to your users. In this post, I show how I optimized a legacy codebase's page load times in probably the most over-engineered way possible...
+publishedDate: 2/15/2021
+---
+
+Like many developers, I've come across (and written) horrible code: terrible performance, poor readability, the lot. In my opinion, it's part of the learning process. You start with a good idea, do it for a while, and then realize weeks or even months later that your idea was bad to begin with. This means you've learned something! And, if you're a perfectionist like me, you'll want to make improvements. So what do you do?
+
+In this article, I'm talking about the nature of JavaScript - specifically how it's loaded in a browser, how badly many of us do it, and how to improve it after the fact.
+
+Imagine this scenario:
+
+```html
+<!DOCTYPE html>
+<head>
+  <script src="some-script.js"></script>
+</head>
+<body>
+    ...
+</body>
+```
+
+When the page loads, no content will be displayed until `some-script.js` has been completely loaded and executed, and the parser can't do anything else until these two steps complete.
+
+This isn't necessarily a problem; however, it is unlikely this was the developer's intention. There are very few reasons why you can't allow the browser to do its thing before running your scripts, and just assume this is not one of those cases.
+
+In addition, developers sometimes stop paying attention to how large their JavaScript codebases become. You've probably seen jokes about how large the `node_modules` folder is, like this one from [devhumor.com](https://devhumor.com).
+
+![](https://images.prismic.io/marshalhayes/f565dea5-5c46-432b-b19e-f908b5fc1dbf_node_modules.jpg?auto=compress,format)
+
+In my particular case, the home page of a site I'm working on has ~700KB of JavaScript. That's **huge** considering that each file has to be loaded and executed until the user can see content on the screen. On a slow network, this can cause the user to see a blank screen for upwards of a few seconds. This won't be tolerated by your users, and many will just leave the site.
+
+Modern bundling techniques can improve this by grouping several smaller files into chunks, as well as even removing unnecessary code automatically, but I won't be covering that here.
+
+With this much parser-blocking JavaScript, [Lighthouse](https://developers.google.com/web/tools/lighthouse/), a popular tool used by many web developers, would tell you that your FCP or [first contentful paint](https://web.dev/first-contentful-paint/) needs improvement. This is the quantitative representation of how long your users have to wait until they see content. Sometimes, if your scripts are loaded somewhere other than the `<head>` (e.g. after some content in the `<body>`), this can instead reflect a poor LCP or [largest contentful paint](https://web.dev/lighthouse-largest-contentful-paint/). This is closely related to FCP, but refers not to the _first_ time some content becomes visible but to the first time the _largest_ area of content becomes visible.
+
+_Note: You could probably correlate a large FCP/LCP with a large bounce rate._
+
+The site in question here scores a 61 in performance on Lighthouse, most notably due to a 6.1 second LCP time - which is irresponsibly huge.
+
+![A screenshot of a lighthouse report showing a 6.1 second LCP. ](https://images.prismic.io/marshalhayes/1493407e-d9e3-4221-86b2-5427eafadc13_irresponsibly_huge_fcp.png?auto=compress,format)
+
+We can improve that bad user experience by using the existing [`defer`/`async` attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#attributes). By just throwing `defer` on each `<script>`, we can - for lack of a better word - defer their parsing and execution until just after the document has been parsed. This allows content to be visible without having to wait for the scripts to load and execute.
+
+```html
+<!DOCTYPE html>
+<head>
+  <script src="some-script.js" defer></script>
+</head>
+<body>
+    ...
+</body>
+```
+
+The support for this is quite good, going all the way back to [partial support in IE6](https://caniuse.com/?search=defer). If you're interested, you can [read more about defer and async on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#attr-defer).
+
+Now, you're probably thinking: If it's that easy, then what's all this talk about doing things "the hard way", huh? Well, we haven't really considered what possible _negative_ side effects deferring these scripts could have.
+
+Firstly, if we defer essential scripts like those that provide shared functions, then any additional script that requires it needs to also be marked with `defer`. Consider this:
+
+```html
+<!DOCTYPE html>
+<head>
+  <script src="essential.js" defer></script>
+</head>
+<body>
+    
+  <script src="not-deferred.js"></script>
+</body>
+```
+
+Assume `essential.js` creates a simple function called `init()` and that `not-deferred.js` calls this function immediately upon its execution. In this example, `not-deferred.js` would throw a `ReferenceError` since `init()` has not been declared yet. Even though `essential.js` is first in the DOM, it will not be executed before `not-deferred.js` because of the `defer` attribute.
+
+The same applies to inline scripts as well.
+
+```html
+<!DOCTYPE html>
+<head>
+  <script src="essential.js" defer></script>
+</head>
+<body>
+  <script>
+    init();
+  </script>
+</body>
+```
+
+The above would throw a `ReferenceError` for the same reason as before: `essential.js` hasn't been loaded yet. Short of wrapping everything in `window.addEventListener('DOMContentLoaded', ...)`, there's not much we can do here since neither `async` nor `defer` are permitted on inline scripts.
+
+As you can probably see, simply using `defer` won't always solve _all_ your problems. In my particular case, it won't really solve any of them - at least not by itself.
+
+Take a look at the current home page layout below.
+
+```html
+// BaseLayout.cshtml
+
+<!DOCTYPE html>
+<head>
+    ...
+</head>
+<body>
+  <script src="essential.js"></script>
+    
+  <main>@{ RenderPlaceholder("Main"); }</main>
+
+  <footer></footer>
+</body>
+```
+
+In the above example, we can't simply defer `essential.js` since we don't know ahead of time what will be rendered in the placeholder. What if it renders scripts as well? Those that require `essential.js` would cause issues. And, since this code has been in production a while, there are probably dozens of components that require functions from it in some way or another.
+
+So how do we optimize this? Again, we don't want to block the browser from parsing the content below the script tag, but we also can't simply defer or even move it somewhere else without negatively affecting other parts of the page.
+
+Before reading further, post a comment below about what you'd do to solve this problem.
+
+Now that you've thought of a solution, I'll give you one I came up with. So, restating the problem in different words:
+
+- Our users have to wait until `essential.js` loads and executes until they can see content
+- Other components in our layout could also include extra scripts that require `essential.js`, and we don't know which ones do
+- Moving `essential.js` down in the DOM won't work for the reason above
+
+To address these three points, imagine you _could_ know which scripts are included in the placeholder. Would that help any? I think it does, and here's why: If we know about the presence of scripts inside our placeholder, we can partially mimic the behavior of defer on the server side by dynamically moving all scripts to just before the closing of the `<body>`. We do have access to rewrite responses, no?
+
+For this solution to work we're gonna need some regex. One to find `<script>`s, and another to find the closing of the `<body>`, so not too hard really.
+
+`/<script([^>]*)>(\n?.*)<\/script>/` oughta do it for the first one. In English, that finds script tags and captures their HTML attributes and inner content in groups `$1` and `$2` respectively.
+
+For the second one, a simple whole word match for `</body>` will suffice: `<\/body>`.
+
+Once your view has been rendered, but before sending it to the client, execute the first expression across the generated HTML. Collect the matches in an array, removing them from the markup as you find them. Now that you have HTML with no `<script>`s at all, you can safely rewrite them to just before the ending `<body>` tag. Just ensure you write them back in the order you read them. Any and all content will now be visible to the client before ever making a single request to a script. This solution essentially mimics the behavior of defer, but done on the server side.
+
+However, this still sucks. Now every time we handle a request, we also have to post-process its response. This will inevitably slow down your response times, and - as you can probably imagine - it's an exponential relationship between the speed of returning data to the client and the length of your markup. The larger your markup becomes, the larger the delay will be before returning data to the client.
+
+Surprisingly, however, I've seen great preliminary performance out of this even with large HTML documents. I guess it's not too surprising though since regex is extremely fast, and our server can spare some compute power to execute this extra processing step.
+
+We could call things done here, but what's the fun in that? There's still room for improvement.
+
+What if we didn't have to parse our HTML documents after the fact, but could do so _during_ their rendering? It turns out you can, but first - let me apologize. I lied to you earlier. Our layout really looks like this:
+
+```html
+// BaseLayout.cshtml
+
+<!DOCTYPE html>
+<head>
+    ...
+</head>
+<body>
+  @Scripts.Render("~/essential.js")   
+  <main>@{ RenderPlaceholder("Main"); }</main>
+    
+  <footer></footer>
+</body>
+```
+
+The content inside the placeholder also uses `Scripts.Render()`. I hope this gives you an idea where I'm going with this.
+
+What if instead of using [.NET's Scripts.Render](<https://docs.microsoft.com/en-us/previous-versions/aspnet/jj646518(v=vs.110)>), we create our own that simply collects the scripts passed to it? This would allow us to do our magic during render time as opposed to a potentially long running post-processing step.
+
+The pseudocode for this is much simpler than before:
+
+For every call to render a `<script>`, capture it's content inside a variable and add it to a list. Finally, just before the end of the `<body>`, loop through the list, rendering the tags you collected.
+
+This would result in the same thing as before, but now it's much less expensive.
+
+From what I've seen, this is a fairly popular pattern. .NET Core, for example, can do this natively with the use of section blocks:
+
+```html
+// BaseLayout-v2.cshtml
+
+<!DOCTYPE html>
+<head>
+    ...
+</head>
+<body>
+  <main>@{ RenderPlaceholder("Main"); }</main>
+
+  <footer></footer>
+   
+  <script src="essential.js" defer></script>
+
+  @RenderSection("Scripts", { required: false });
+</body>
+```
+
+And our components would look something like this:
+
+```html
+// SomeWidget.cshtml
+
+<h1>Hello, world!</h1>
+
+@section Scripts {
+<script src="some-other-script.js" defer></script>
+}
+```
+
+```html
+<!DOCTYPE html>
+<head>
+  ...
+</head>
+<body>
+  <main>
+    <h1>Hello, world!</h1>
+  </main>
+    
+  <footer></footer>
+    
+  <script src="essential.js" defer></script>
+    
+  <script src="some-other-script.js" defer></script>
+</body>
+```
+
+In these examples, .NET Core sections behave exactly how we want. Our layout defines where they go in the document, and our components simply ensure they wrap all their scripts inside said section. No regexs, no rewriting responses, no custom script render function, nothing - it just works out of the box.
+
+I think you'll see a sizable difference in your FCP/LCP times using any of these solutions, and your users won't be stuck seeing an empty page.
+
+Ideally, I'd rather go with the latter solution, but that would mean rewriting legacy code and I don't want to do that. The custom approach is probably the best one here for me since it requires minimal modification of legacy code.
